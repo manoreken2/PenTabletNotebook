@@ -412,5 +412,14 @@ namespace PenTabletNotebook {
             mPLMgr.ChangePage(mPLMgr.CurPageNr + 1);
             UpdateUI();
         }
+
+        private void ButtonClearDrawings_Click(object sender, RoutedEventArgs e) {
+            if (!mInitialized) {
+                return;
+            }
+
+            mPLMgr.DOMgr.Clear(DrawObjMgr.ClearMode.CM_NewDU);
+            UpdateUI();
+        }
     }
 }
