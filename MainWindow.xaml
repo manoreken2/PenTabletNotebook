@@ -103,15 +103,15 @@
                             <RowDefinition Height="1*" />
                         </Grid.RowDefinitions>
                         <Label Content="Scale:" HorizontalAlignment="Right" VerticalAlignment="Center" />
-                        <Slider Grid.Column="1" VerticalAlignment="Center" Name="sliderScaling" Maximum="1.0" Value="0.5" Minimum="0.5" SmallChange="0.125" LargeChange="0.125" TickFrequency="0.125" TickPlacement="Both" />
+                        <Slider Grid.Column="1" VerticalAlignment="Center" Name="sliderScaling" Maximum="1.0" Value="0.47" Minimum="0.3" Ticks="0.3 0.47 0.5 0.625 0.75 0.875 1.0" SmallChange="0.125" LargeChange="0.125" TickFrequency="0.125" TickPlacement="Both" />
                         <CheckBox x:Name="mCBDispDrawings" Grid.Row="1" Grid.ColumnSpan="2" Content="Disp Drawings" IsChecked="True" Checked="mCBDispDrawings_Checked" Unchecked="mCBDispDrawings_Unchecked" />
                     </Grid>
                 </GroupBox>
             </StackPanel>
         </GroupBox>
         <GroupBox Grid.RowSpan="2" Grid.Column="1" Header="Canvas" Margin="0,4,4,4" >
-            <ScrollViewer HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" >
-                <Grid Background="White" MouseMove="Canvas_MouseMove" MouseLeftButtonDown="Canvas_MouseLeftButtonDown" MouseLeftButtonUp="Canvas_MouseLeftButtonUp" MouseRightButtonUp="Canvas_MouseRightButtonUp" Cursor="Cross" >
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Visible" >
+                <Grid Background="#FFC0C0C0" MouseMove="Canvas_MouseMove" MouseLeftButtonDown="Canvas_MouseLeftButtonDown" MouseLeftButtonUp="Canvas_MouseLeftButtonUp" MouseRightButtonUp="Canvas_MouseRightButtonUp" Cursor="Cross" >
                     <Grid.LayoutTransform>
                         <TransformGroup>
                             <ScaleTransform ScaleY="{Binding Path=Value, ElementName=sliderScaling}" 
