@@ -119,6 +119,8 @@ namespace PenTabletNotebook {
             mCanvas = c;
             mBrush = b;
 
+            mPolyLineSegment.IsSmoothJoin = true;
+
             mPathFig.Segments.Add(mPolyLineSegment);
             mPathGeom.Figures.Add(mPathFig);
             mGeomGroup.Children.Add(mPathGeom);
@@ -136,26 +138,29 @@ namespace PenTabletNotebook {
                 return;
             }
 
-            // Console.WriteLine("Move L");
-            var msePos = e.GetPosition(mCanvas);
-
             // たまに、LeftButtonDownが1度も来ないままMouseMoveが来る。
-            if (mPolyLineSegment.Points.Count == 0) {
+            if (mPathFig.StartPoint.X == 0 &&
+                mPathFig.StartPoint.Y == 0) {
                 Console.WriteLine("Move L without Down!");
                 return;
             }
 
+            var msePos = e.GetPosition(mCanvas);
+
+            Console.WriteLine("MM L {0}, {1}", msePos.X, msePos.Y);
+
+            /*
             var lastPos = mPolyLineSegment.Points[mPolyLineSegment.Points.Count - 1];
             var lastToCur = msePos - lastPos;
-            if (lastToCur.Length < 2.0) {
+            if (lastToCur.Length < 1.0) {
                 // 最後の点が近い場合追加しない。
                 return;
             }
+            */
 
             mPolyLineSegment.Points.Add(msePos);
         }
         public override void MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            // Console.WriteLine("Up");
             if (mPolyLineSegment.Points.Count == 0) {
                 // マウス操作でメニューからファイルをロードした場合、いきなりLButtonUpイベントが来ます。
                 Console.WriteLine("Mouse Lup pass");
@@ -163,23 +168,27 @@ namespace PenTabletNotebook {
             }
 
             var msePos = e.GetPosition(mCanvas);
+            /*
             var lastPos = mPolyLineSegment.Points[mPolyLineSegment.Points.Count - 1];
-            var lastToCur = msePos - lastPos;
-            if (lastToCur.Length < 2.0) {
-                // 最後の点が近い場合すこしずらします。
+            var d = lastPos - msePos;
+            if (d.Length < 2.0) { 
+                // 最後の点をすこしずらします。
                 msePos += new Vector(2, 2);
             }
+            */
+
+            Console.WriteLine("MLUp {0}, {1}", msePos.X, msePos.Y);
 
             mPolyLineSegment.Points.Add(msePos);
         }
 
         public override void MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            // Console.WriteLine("Down");
 
             var msePos = e.GetPosition(mCanvas);
 
+            Console.WriteLine("MLDn {0}, {1}", msePos.X, msePos.Y);
+
             mPathFig.StartPoint = msePos;
-            mPolyLineSegment.Points.Add(msePos);
         }
 
         public override void Save(System.IO.BinaryWriter bw) {

@@ -7,7 +7,7 @@ using System.Windows.Controls;
 
 namespace PenTabletNotebook {
     class DOPage {
-        private string mImgFilename;
+        private string mImgFilename = "";
 
         public string ImgFilename {
             get { return mImgFilename; }

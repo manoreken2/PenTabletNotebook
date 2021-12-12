@@ -55,6 +55,9 @@ namespace PenTabletNotebook {
                     foreach (var d in mDOList) {
                         d.ModeChangeTo(DrawObj.Mode.M_Draw);
                     }
+                    // 選択DO番号を最後のDUにします。
+                    System.Diagnostics.Debug.Assert(0 < mDOList.Count);
+                    mSelectedDOidx = mDOList.Count - 1;
                     break;
                 case PenModeEnum.PM_Select:
                     break;
@@ -180,7 +183,7 @@ namespace PenTabletNotebook {
 
         public void MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             var msePos = e.GetPosition(mCanvas);
-            Console.WriteLine("Lup {0} {1}", (int)msePos.X, (int)msePos.Y);
+            //Console.WriteLine("Lup {0} {1}", (int)msePos.X, (int)msePos.Y);
 
             switch (mPenMode) {
                 case PenModeEnum.PM_Pen:

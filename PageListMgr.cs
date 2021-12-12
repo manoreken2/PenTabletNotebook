@@ -80,7 +80,7 @@ namespace PenTabletNotebook {
         }
 
         /// <summary>
-        /// ページを位置posに挿入します。mCurPageNrのずれに注意して下さい。
+        /// ページを位置posに挿入します。mCurPageNrのずれに注意して下さい(0 ≦ pos ≦ mCurPageの場合ずれが生じます)。
         /// </summary>
         /// <param name="pos">0 ≦ pos ≦ mPageList.Count。0のとき最初のページがNewPage。Countのとき最後のページの後ろにNewPage。</param>
         public DOPage AddNewPage(int pos) {
@@ -99,7 +99,7 @@ namespace PenTabletNotebook {
         }
 
         private void ShowImg(string path) {
-            if (path == null) {
+            if (path == null || path.Length == 0) {
                 mImage.Source = null;
                 return;
             }
@@ -160,6 +160,7 @@ namespace PenTabletNotebook {
                 ChangePage(pageNr);
             } else {
                 // 読み出し失敗。
+                mDOMgr.Clear(DrawObjMgr.ClearMode.CM_NewDU);
             }
 
             NewPageIfEmpty();

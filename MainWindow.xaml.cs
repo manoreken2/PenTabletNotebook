@@ -211,6 +211,11 @@ namespace PenTabletNotebook {
             UpdateUI();
         }
 
+        private void Canvas_MouseRightButtonUp(object sender, MouseButtonEventArgs e) {
+            mPLMgr.DOMgr.MouseRightButtonUp(sender, e);
+            UpdateUI();
+        }
+
         public void HitObjectMoved(Object tag, HitObjectShape hos, Rect xywh) {
             Console.WriteLine("HitObjectMoved {0} {1} {2} {3} {4}", tag, xywh.Left, xywh.Top, xywh.Width, xywh.Height);
         }
@@ -273,11 +278,6 @@ namespace PenTabletNotebook {
 
         private void ButtonUndo_Click(object sender, RoutedEventArgs e) {
             Undo();
-            UpdateUI();
-        }
-
-        private void mCanvas_MouseRightButtonUp(object sender, MouseButtonEventArgs e) {
-            mPLMgr.DOMgr.MouseRightButtonUp(sender, e);
             UpdateUI();
         }
 
@@ -384,6 +384,32 @@ namespace PenTabletNotebook {
 
         private void ButtonDeletePage_Click(object sender, RoutedEventArgs e) {
             mPLMgr.DeleteCurPage();
+            UpdateUI();
+        }
+
+        private void mCBDispDrawings_Checked(object sender, RoutedEventArgs e) {
+            if (!mInitialized) {
+                return;
+            }
+
+            mCanvas.Visibility = Visibility.Visible;
+        }
+
+        private void mCBDispDrawings_Unchecked(object sender, RoutedEventArgs e) {
+            if (!mInitialized) {
+                return;
+            }
+
+            mCanvas.Visibility = Visibility.Hidden;
+        }
+
+        private void ButtonAddNewPage_Click(object sender, RoutedEventArgs e) {
+            if (!mInitialized) {
+                return;
+            }
+
+            mPLMgr.AddNewPage(mPLMgr.CurPageNr + 1);
+            mPLMgr.ChangePage(mPLMgr.CurPageNr + 1);
             UpdateUI();
         }
     }
