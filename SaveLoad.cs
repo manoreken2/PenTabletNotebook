@@ -8,13 +8,10 @@ using System.Threading.Tasks;
 namespace PenTabletNotebook {
     class SaveLoad {
         const int FILE_FOURCC = 0x424e5450;
-        const int FILE_VERSION = 4;
+        const int FILE_VERSION = 5;
 
         List<DOPage> mPageList = new List<DOPage>();
-
-        public void SaveAddPage(DOPage p) {
-            mPageList.Add(p);
-        }
+        List<PageTag> mPageTagList = new List<PageTag>();
 
         public static void SerializeString(string s, BinaryWriter bw) {
             var utf8 = System.Text.Encoding.UTF8.GetBytes(s);
@@ -27,6 +24,34 @@ namespace PenTabletNotebook {
             int bytes = br.ReadInt32();
             var utf8 = br.ReadBytes(bytes);
             return System.Text.Encoding.UTF8.GetString(utf8);
+        }
+
+        private void SerializePageTag(PageTag pt, BinaryWriter bw) {
+            // page nr
+            // name
+            int pgNr = pt.PageNr;
+
+            bw.Write(pgNr);
+            SerializeString(pt.Name, bw);
+        }
+
+        private PageTag DeserializePageTag(BinaryReader br) {
+            int pgNr = br.ReadInt32();
+            string name = DeserializeString(br);
+            return new PageTag(name, pgNr);
+        }
+
+        // ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+
+        /// <summary>
+        /// ページの数だけSaveAddPageを呼んでからSave()します。
+        /// </summary>
+        public void SaveAddPage(DOPage p) {
+            mPageList.Add(p);
+        }
+
+        public void SaveAddPageTag(PageTag tnp) {
+            mPageTagList.Add(tnp);
         }
 
         /// <summary>
@@ -43,9 +68,17 @@ namespace PenTabletNotebook {
                     // 保存ファイル名を記録。
                     SerializeString(path, bw);
 
+                    // PageTagを保存。
+                    int ptCount = mPageTagList.Count;
+                    bw.Write(ptCount);
+                    for (int i=0; i<mPageTagList.Count; ++i) {
+                        var p = mPageTagList[i];
+                        SerializePageTag(p, bw);
+                    }
+
+                    // ページを保存。
                     int plCount = mPageList.Count;
                     bw.Write(plCount);
-
                     for (int i=0; i<mPageList.Count;++i) {
                         var p = mPageList[i];
                         p.Save(bw);
@@ -60,10 +93,11 @@ namespace PenTabletNotebook {
             return true;
         }
 
-        public bool Load(string path, ref List<DOPage> pageList_return, ref int curPageNr_return) {
+        public bool Load(string path, ref SaveCtx sc) {
             string loadDir = System.IO.Path.GetDirectoryName(path);
 
-            pageList_return.Clear();
+            sc.pageList.Clear();
+            sc.pageTagList.Clear();
 
             try {
                 using (var br = new BinaryReader(File.Open(path, FileMode.Open))) {
@@ -73,17 +107,27 @@ namespace PenTabletNotebook {
                         return false;
                     }
                     int version = br.ReadInt32();
-                    if (FILE_VERSION != version) {
+                    if (4 != version && FILE_VERSION != version) {
                         Console.WriteLine("Version unsupported {0} should be {1}", version, FILE_VERSION);
                         return false;
                     }
 
-                    curPageNr_return = br.ReadInt32();
+                    sc.curPageNr = br.ReadInt32();
 
                     // 保存ファイル名。
                     string savePath = DeserializeString(br);
                     string saveDir = System.IO.Path.GetDirectoryName(savePath);
 
+                    if (5 <= version) {
+                        // PageTagを読み出し。
+                        int ptCount = br.ReadInt32();
+                        for (int i=0; i<ptCount; ++i) {
+                            var p = DeserializePageTag(br);
+                            sc.pageTagList.Add(p);
+                        }
+                    }
+
+                    // ページを読み出し。
                     int plCount = br.ReadInt32();
                     if (plCount < 0) {
                         Console.WriteLine("Page count is negative {0}", plCount);
@@ -94,7 +138,7 @@ namespace PenTabletNotebook {
                         var p = new DOPage();
                         p.Load(br, saveDir, loadDir);
                         Console.WriteLine("Page {0} loaded. {1}", i, System.IO.Path.GetFileName(p.ImgFilename));
-                        pageList_return.Add(p);
+                        sc.pageList.Add(p);
                     }
                 }
             } catch (IOException ex) {

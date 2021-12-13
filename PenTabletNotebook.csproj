@@ -67,7 +67,9 @@
     <Compile Include="IHitObjectMoved.cs" />
     <Compile Include="HitObjectShape.cs" />
     <Compile Include="PageListMgr.cs" />
+    <Compile Include="SaveCtx.cs" />
     <Compile Include="SaveLoad.cs" />
+    <Compile Include="PageTag.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

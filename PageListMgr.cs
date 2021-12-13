@@ -146,18 +146,21 @@ namespace PenTabletNotebook {
             return dop;
         }
 
-        public bool Load(string path) {
+        public bool Load(string path, ref List<PageTag> ptList_return) {
             mCanvas.Children.Clear();
             mPageList.Clear();
+            ptList_return.Clear();
             mDOMgr.Clear(DrawObjMgr.ClearMode.CM_ZeroObj);
 
             var sl = new SaveLoad();
-            int pageNr = 0;
-            bool b = sl.Load(path, ref mPageList, ref pageNr);
+            var sc = new SaveCtx();
+            sc.pageList = mPageList;
+            sc.pageTagList = ptList_return;
+            bool b = sl.Load(path, ref sc);
             if (b) {
                 // 最初のページを表示。
                 mCurPageNr = -1;
-                ChangePage(pageNr);
+                ChangePage(sc.curPageNr);
             } else {
                 // 読み出し失敗。
                 mDOMgr.Clear(DrawObjMgr.ClearMode.CM_NewDU);
@@ -167,7 +170,7 @@ namespace PenTabletNotebook {
             return b;
         }
 
-        public bool Save(string path) {
+        public bool Save(string path, List<PageTag> ptList) {
             var sl = new SaveLoad();
             for (int i = 0; i < mPageList.Count; ++i) {
                 var p = mPageList[i];
@@ -178,6 +181,10 @@ namespace PenTabletNotebook {
                 }
 
                 sl.SaveAddPage(p);
+            }
+
+            foreach (var pt in ptList) {
+                sl.SaveAddPageTag(pt);
             }
 
             return sl.Save(path, mCurPageNr);

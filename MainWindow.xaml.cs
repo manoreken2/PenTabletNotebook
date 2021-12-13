@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Linq;
 
 namespace PenTabletNotebook {
     public partial class MainWindow : Window, IHitObjectMoved {
@@ -18,6 +19,7 @@ namespace PenTabletNotebook {
         private string mSavePath = "";
 
         private PageListMgr mPLMgr;
+        private int mPageNrBeforeJump = -1;
 
         private static string AssemblyVersion {
             get { return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(); }
@@ -60,6 +62,11 @@ namespace PenTabletNotebook {
             mButtonNext.IsEnabled = 0 < mPLMgr.PageCount;
             mButtonPrev.IsEnabled = 0 < mPLMgr.PageCount;
 
+            mSliderPageNr.Maximum = mPLMgr.PageCount - 1;
+            mSliderPageNr.Value = mPLMgr.CurPageNr;
+
+            mButtonTagBack.IsEnabled = 0 <= mPageNrBeforeJump && mPageNrBeforeJump < mPLMgr.PageCount;
+
             UpdateWindowTitle();
         }
 
@@ -88,11 +95,17 @@ namespace PenTabletNotebook {
                 return false;
             }
             string path = ofd.FileName;
-
-            bool result = mPLMgr.Load(path);
+            var ptList = new List<PageTag>();
+            bool result = mPLMgr.Load(path, ref ptList);
             if (result) {
                 // 読み出し成功。
                 mSavePath = path;
+
+                // PageTagリストを更新します。
+                mLBPageTags.Items.Clear();
+                foreach (var pt in ptList) {
+                    mLBPageTags.Items.Add(pt);
+                }
             } else {
                 // 読み出し失敗。
                 MessageBox.Show("Error Opening File", "Error opening file", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -107,7 +120,14 @@ namespace PenTabletNotebook {
         private void Save() {
             System.Diagnostics.Debug.Assert(0 < mSavePath.Length);
 
-            bool result = mPLMgr.Save(mSavePath);
+            var ptList = new List<PageTag>();
+            for(int i=0; i<mLBPageTags.Items.Count; ++i) {
+                var pt = mLBPageTags.Items[i] as PageTag;
+                ptList.Add(pt);
+            }
+            ptList.Sort(PageTag.Compare);
+
+            bool result = mPLMgr.Save(mSavePath, ptList);
             if (!result) {
                 MessageBox.Show("Error Saving File", "Error saving file {0}", MessageBoxButton.OK, MessageBoxImage.Error);
             }
@@ -127,12 +147,18 @@ namespace PenTabletNotebook {
             Save();
         }
 
+        private void New() {
+            mPLMgr.ClearAndNewPage();
+            mImage.Source = null;
+            mLBPageTags.Items.Clear();
+            mPageNrBeforeJump = -1;
+            UpdateUI();
+        }
+
         // File menu ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
         private void MenuItemFileNew_Click(object sender, RoutedEventArgs e) {
-            mPLMgr.ClearAndNewPage();
-            mImage.Source = null;
-            UpdateUI();
+            New();
         }
 
         private void MenuItemFileOpen_Click(object sender, RoutedEventArgs e) {
@@ -421,5 +447,58 @@ namespace PenTabletNotebook {
             mPLMgr.DOMgr.Clear(DrawObjMgr.ClearMode.CM_NewDU);
             UpdateUI();
         }
+
+        private void SliderPageNr_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
+            if (!mInitialized) {
+                return;
+            }
+
+            int newPgNr = (int)mSliderPageNr.Value;
+
+            ChangePage(newPgNr);
+        }
+
+        private void mButtonAddTag_Click(object sender, RoutedEventArgs e) {
+            // タグ名tagNameを決定。
+            string tagName = "Untitled tag";
+            if (0 < mTBTagName.Text.Length) {
+                tagName = mTBTagName.Text;
+            }
+
+            mLBPageTags.Items.Add(new PageTag(tagName, mPLMgr.CurPageNr));
+        }
+
+        private void mButtonTagBack_Click(object sender, RoutedEventArgs e) {
+            if (mPageNrBeforeJump < 0 || mPLMgr.PageCount <= mPageNrBeforeJump) {
+                Console.WriteLine("TagBack Invalid pageNr {0}", mPageNrBeforeJump);
+                return;
+            }
+
+            ChangePage(mPageNrBeforeJump);
+
+            mPageNrBeforeJump = -1;
+            UpdateUI();
+        }
+
+        private void LBTags_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if (mLBPageTags.SelectedIndex < 0) {
+                // 何も選択されてない。
+                return;
+            }
+
+            mPageNrBeforeJump = mPLMgr.CurPageNr;
+
+            var tnp = mLBPageTags.SelectedItem as PageTag;
+
+            ChangePage(tnp.PageNr);
+        }
+
+        private void mLBPageTags_MouseRightButtonUp(object sender, MouseButtonEventArgs e) {
+            if (0 <= mLBPageTags.SelectedIndex) { 
+                // 選択されたPageTagを削除。
+                mLBPageTags.Items.RemoveAt(mLBPageTags.SelectedIndex);
+            }
+        }
+
     }
 }
