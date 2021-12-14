@@ -41,10 +41,12 @@ namespace PenTabletNotebook {
 
         private void Undo() {
             mPLMgr.DOMgr.Undo();
+            UpdateUI();
         }
 
         private void Redo() {
             mPLMgr.DOMgr.Redo();
+            UpdateUI();
         }
 
         private void UpdateUI() {
@@ -155,6 +157,17 @@ namespace PenTabletNotebook {
             UpdateUI();
         }
 
+        private void DeleteCurPage() {
+            mPLMgr.DeleteCurPage();
+
+            // Backボタンで戻るページ番号の更新。
+            if (0 <= mPageNrBeforeJump && mPLMgr.CurPageNr <= mPageNrBeforeJump) {
+                --mPageNrBeforeJump;
+            }
+
+            UpdateUI();
+        }
+
         // File menu ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
         private void MenuItemFileNew_Click(object sender, RoutedEventArgs e) {
@@ -172,13 +185,11 @@ namespace PenTabletNotebook {
             } else {
                 Save();
             }
-            UpdateUI();
         }
 
 
         private void MenuItemFileSaveAs_Click(object sender, RoutedEventArgs e) {
             SaveAs();
-            UpdateUI();
         }
 
         private void MenuItemFileExit_Click(object sender, RoutedEventArgs e) {
@@ -189,12 +200,10 @@ namespace PenTabletNotebook {
 
         private void MenuItemEditUndo_Click(object sender, RoutedEventArgs e) {
             Undo();
-            UpdateUI();
         }
 
         private void MenuItemEditRedo_Click(object sender, RoutedEventArgs e) {
             Redo();
-            UpdateUI();
         }
 
         // Command handlings ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
@@ -246,56 +255,56 @@ namespace PenTabletNotebook {
             Console.WriteLine("HitObjectMoved {0} {1} {2} {3} {4}", tag, xywh.Left, xywh.Top, xywh.Width, xywh.Height);
         }
 
-        private void mRBCWhite_Checked(object sender, RoutedEventArgs e) {
+        private void RBCWhite_Checked(object sender, RoutedEventArgs e) {
             if (!mInitialized) {
                 return;
             }
             mPLMgr.DOMgr.SetCurPenBrush(new SolidColorBrush(Colors.White));
         }
 
-        private void mRBCCyan_Checked(object sender, RoutedEventArgs e) {
+        private void RBCCyan_Checked(object sender, RoutedEventArgs e) {
             if (!mInitialized) {
                 return;
             }
             mPLMgr.DOMgr.SetCurPenBrush(new SolidColorBrush(Colors.Cyan));
         }
 
-        private void mRBCMagenta_Checked(object sender, RoutedEventArgs e) {
+        private void RBCMagenta_Checked(object sender, RoutedEventArgs e) {
             if (!mInitialized) {
                 return;
             }
             mPLMgr.DOMgr.SetCurPenBrush(new SolidColorBrush(Colors.Magenta));
         }
 
-        private void mRBCYellow_Checked(object sender, RoutedEventArgs e) {
+        private void RBCYellow_Checked(object sender, RoutedEventArgs e) {
             if (!mInitialized) {
                 return;
             }
             mPLMgr.DOMgr.SetCurPenBrush(new SolidColorBrush(Colors.Yellow));
         }
 
-        private void mRBCRed_Checked(object sender, RoutedEventArgs e) {
+        private void RBCRed_Checked(object sender, RoutedEventArgs e) {
             if (!mInitialized) {
                 return;
             }
             mPLMgr.DOMgr.SetCurPenBrush(new SolidColorBrush(Colors.Red));
         }
 
-        private void mRBCGreen_Checked(object sender, RoutedEventArgs e) {
+        private void RBCGreen_Checked(object sender, RoutedEventArgs e) {
             if (!mInitialized) {
                 return;
             }
             mPLMgr.DOMgr.SetCurPenBrush(new SolidColorBrush(Colors.Green));
         }
 
-        private void mRBCBlue_Checked(object sender, RoutedEventArgs e) {
+        private void RBCBlue_Checked(object sender, RoutedEventArgs e) {
             if (!mInitialized) {
                 return;
             }
             mPLMgr.DOMgr.SetCurPenBrush(new SolidColorBrush(Colors.Blue));
         }
 
-        private void mRBCBlack_Checked(object sender, RoutedEventArgs e) {
+        private void RBCBlack_Checked(object sender, RoutedEventArgs e) {
             if (!mInitialized) {
                 return;
             }
@@ -304,26 +313,31 @@ namespace PenTabletNotebook {
 
         private void ButtonUndo_Click(object sender, RoutedEventArgs e) {
             Undo();
-            UpdateUI();
         }
 
         private void ButtonRedo_Click(object sender, RoutedEventArgs e) {
             Redo();
-            UpdateUI();
         }
 
-        private void mRBSelect_Checked(object sender, RoutedEventArgs e) {
+        private void RBSelect_Checked(object sender, RoutedEventArgs e) {
             if (!mInitialized) {
                 return;
             }
             mPLMgr.DOMgr.SetPenMode(PenModeEnum.PM_Select);
         }
 
-        private void mRBPen_Checked(object sender, RoutedEventArgs e) {
+        private void RBPen_Checked(object sender, RoutedEventArgs e) {
             if (!mInitialized) {
                 return;
             }
             mPLMgr.DOMgr.SetPenMode(PenModeEnum.PM_Pen);
+        }
+
+        private void RBEraser_Checked(object sender, RoutedEventArgs e) {
+            if (!mInitialized) {
+                return;
+            }
+            mPLMgr.DOMgr.SetPenMode(PenModeEnum.PM_Eraser);
         }
 
         private void MenuItemFileAddImg_Click(object sender, RoutedEventArgs e) {
@@ -337,7 +351,7 @@ namespace PenTabletNotebook {
             }
 
             var fnList = new List<string>();
-            foreach (var fn in ofd.FileNames) { 
+            foreach (var fn in ofd.FileNames) {
                 fnList.Add(fn);
             }
             fnList.Sort();
@@ -373,15 +387,14 @@ namespace PenTabletNotebook {
             ChangePage(newPgNr);
         }
 
-        private void mTBPageNr_TextChanged(object sender, TextChangedEventArgs e) {
+        private void TBPageNr_TextChanged(object sender, TextChangedEventArgs e) {
             if (!mInitialized) {
                 return;
             }
 
             Console.WriteLine("mTBPageNr_TextChanged()");
 
-            int newPgNr;
-            if (!int.TryParse(mTBPageNr.Text, out newPgNr)) {
+            if (!int.TryParse(mTBPageNr.Text, out int newPgNr)) {
                 return;
             }
 
@@ -409,11 +422,10 @@ namespace PenTabletNotebook {
         }
 
         private void ButtonDeletePage_Click(object sender, RoutedEventArgs e) {
-            mPLMgr.DeleteCurPage();
-            UpdateUI();
+            DeleteCurPage();
         }
 
-        private void mCBDispDrawings_Checked(object sender, RoutedEventArgs e) {
+        private void CBDispDrawings_Checked(object sender, RoutedEventArgs e) {
             if (!mInitialized) {
                 return;
             }
@@ -421,7 +433,7 @@ namespace PenTabletNotebook {
             mCanvas.Visibility = Visibility.Visible;
         }
 
-        private void mCBDispDrawings_Unchecked(object sender, RoutedEventArgs e) {
+        private void CBDispDrawings_Unchecked(object sender, RoutedEventArgs e) {
             if (!mInitialized) {
                 return;
             }
@@ -458,17 +470,40 @@ namespace PenTabletNotebook {
             ChangePage(newPgNr);
         }
 
-        private void mButtonAddTag_Click(object sender, RoutedEventArgs e) {
+        private void ButtonAddTag_Click(object sender, RoutedEventArgs e) {
             // タグ名tagNameを決定。
             string tagName = "Untitled tag";
             if (0 < mTBTagName.Text.Length) {
                 tagName = mTBTagName.Text;
             }
 
-            mLBPageTags.Items.Add(new PageTag(tagName, mPLMgr.CurPageNr));
+            for (int i=mLBPageTags.Items.Count-1; 0 <= i; --i) {
+                var pt = mLBPageTags.Items[i] as PageTag;
+                if (pt.PageNr == mPLMgr.CurPageNr) {
+                    // 同じページのタグが既にあるので削除。
+                    mLBPageTags.Items.RemoveAt(i);
+                    // 処理続行。
+                }
+            }
+
+            var newPageTag = new PageTag(tagName, mPLMgr.CurPageNr);
+
+            bool bAdded = false;
+            for (int i = mLBPageTags.Items.Count - 1; 0 <= i; --i) {
+                var pt = mLBPageTags.Items[i] as PageTag;
+                if (pt.PageNr < mPLMgr.CurPageNr) {
+                    mLBPageTags.Items.Insert(i+1, newPageTag);
+                    bAdded = true;
+                    break;
+                }
+            }
+            if (!bAdded) {
+                // リストの先頭に追加します。
+                mLBPageTags.Items.Insert(0, newPageTag);
+            }
         }
 
-        private void mButtonTagBack_Click(object sender, RoutedEventArgs e) {
+        private void ButtonTagBack_Click(object sender, RoutedEventArgs e) {
             if (mPageNrBeforeJump < 0 || mPLMgr.PageCount <= mPageNrBeforeJump) {
                 Console.WriteLine("TagBack Invalid pageNr {0}", mPageNrBeforeJump);
                 return;
@@ -480,7 +515,7 @@ namespace PenTabletNotebook {
             UpdateUI();
         }
 
-        private void LBTags_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+        private void LBPageTags_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (mLBPageTags.SelectedIndex < 0) {
                 // 何も選択されてない。
                 return;
@@ -493,12 +528,11 @@ namespace PenTabletNotebook {
             ChangePage(tnp.PageNr);
         }
 
-        private void mLBPageTags_MouseRightButtonUp(object sender, MouseButtonEventArgs e) {
-            if (0 <= mLBPageTags.SelectedIndex) { 
+        private void LBPageTags_MouseRightButtonUp(object sender, MouseButtonEventArgs e) {
+            if (0 <= mLBPageTags.SelectedIndex) {
                 // 選択されたPageTagを削除。
                 mLBPageTags.Items.RemoveAt(mLBPageTags.SelectedIndex);
             }
         }
-
     }
 }

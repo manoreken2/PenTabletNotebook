@@ -8,6 +8,7 @@ namespace PenTabletNotebook {
     public enum PenModeEnum {
         PM_Select,
         PM_Pen,
+        PM_Eraser,
         PM_NUM
     }
 }
