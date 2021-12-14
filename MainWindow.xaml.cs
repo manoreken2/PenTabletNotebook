@@ -57,7 +57,7 @@ namespace PenTabletNotebook {
 
             // ページ番号関連。
             mTBPageNr.Text = string.Format("{0}", mPLMgr.CurPageNr + 1);
-            mLabelTotalPages.Content = string.Format("/{0}", mPLMgr.PageCount);
+            mLabelTotalPages.Content = string.Format("/ {0}", mPLMgr.PageCount);
 
             System.Diagnostics.Debug.Assert(mPLMgr.CurPageNr < mPLMgr.PageCount);
 
@@ -576,6 +576,17 @@ namespace PenTabletNotebook {
                 NextPage();
                 e.Handled = true;
             }
+        }
+
+        private void ButtonScaleToFit_Click(object sender, RoutedEventArgs e) {
+            double scaleX = mSVCanvas.ActualWidth  / mImage.Width;
+            double scaleY = mSVCanvas.ActualHeight / mImage.Height;
+            if (scaleX < scaleY) {
+                mSliderScaling.Value = scaleX;
+            } else {
+                mSliderScaling.Value = scaleY;
+            }
+
         }
     }
 }
