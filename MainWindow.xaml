@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PenTabletNotebook"
         mc:Ignorable="d"
-        Title="PenTabletNotebook" Height="800" Width="1280" Loaded="Window_Loaded">
+        Title="PenTabletNotebook" Height="800" Width="1280" Loaded="Window_Loaded" KeyUp="Window_KeyUp" MouseWheel="Window_MouseWheel">
     <Window.CommandBindings>
         <CommandBinding Command="ApplicationCommands.New" Executed="MenuItemFileNew_Click" CanExecute="FileNewCmdCanExecute"/>
         <CommandBinding Command="ApplicationCommands.Open" Executed="MenuItemFileOpen_Click" CanExecute="FileOpenCmdCanExecute"/>

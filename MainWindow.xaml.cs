@@ -56,7 +56,7 @@ namespace PenTabletNotebook {
             mButtonRedo.IsEnabled = mPLMgr.DOMgr.CanRedo();
 
             // ページ番号関連。
-            mTBPageNr.Text           = string.Format("{0}",  mPLMgr.CurPageNr + 1);
+            mTBPageNr.Text = string.Format("{0}", mPLMgr.CurPageNr + 1);
             mLabelTotalPages.Content = string.Format("/{0}", mPLMgr.PageCount);
 
             System.Diagnostics.Debug.Assert(mPLMgr.CurPageNr < mPLMgr.PageCount);
@@ -123,7 +123,7 @@ namespace PenTabletNotebook {
             System.Diagnostics.Debug.Assert(0 < mSavePath.Length);
 
             var ptList = new List<PageTag>();
-            for(int i=0; i<mLBPageTags.Items.Count; ++i) {
+            for (int i = 0; i < mLBPageTags.Items.Count; ++i) {
                 var pt = mLBPageTags.Items[i] as PageTag;
                 ptList.Add(pt);
             }
@@ -166,6 +166,36 @@ namespace PenTabletNotebook {
             }
 
             UpdateUI();
+        }
+
+        private void NextPage() {
+            System.Diagnostics.Debug.Assert(0 < mPLMgr.PageCount);
+
+            if (mPLMgr.PageCount == 1) {
+                return;
+            }
+
+            int newPgNr = mPLMgr.CurPageNr + 1;
+            if (mPLMgr.PageCount <= newPgNr) {
+                newPgNr = 0;
+            }
+
+            ChangePage(newPgNr);
+        }
+
+        private void PrevPage() {
+            System.Diagnostics.Debug.Assert(0 < mPLMgr.PageCount);
+
+            if (mPLMgr.PageCount == 1) {
+                return;
+            }
+
+            int newPgNr = mPLMgr.CurPageNr - 1;
+            if (newPgNr < 0) {
+                newPgNr = mPLMgr.PageCount - 1;
+            }
+
+            ChangePage(newPgNr);
         }
 
         // File menu ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
@@ -358,7 +388,7 @@ namespace PenTabletNotebook {
 
             foreach (var fn in fnList) {
                 // 今の位置の次のページに追加。
-                var dop = mPLMgr.AddNewPage(mPLMgr.CurPageNr+1);
+                var dop = mPLMgr.AddNewPage(mPLMgr.CurPageNr + 1);
                 dop.ImgFilename = fn;
             }
 
@@ -366,25 +396,11 @@ namespace PenTabletNotebook {
         }
 
         private void ButtonPrevPage_Click(object sender, RoutedEventArgs e) {
-            System.Diagnostics.Debug.Assert(0 < mPLMgr.PageCount);
-
-            int newPgNr = mPLMgr.CurPageNr - 1;
-            if (newPgNr < 0) {
-                newPgNr = mPLMgr.PageCount - 1;
-            }
-
-            ChangePage(newPgNr);
+            PrevPage();
         }
 
         private void ButtonNextPage_Click(object sender, RoutedEventArgs e) {
-            System.Diagnostics.Debug.Assert(0 < mPLMgr.PageCount);
-
-            int newPgNr = mPLMgr.CurPageNr + 1;
-            if (mPLMgr.PageCount <= newPgNr) {
-                newPgNr = 0;
-            }
-
-            ChangePage(newPgNr);
+            NextPage();
         }
 
         private void TBPageNr_TextChanged(object sender, TextChangedEventArgs e) {
@@ -477,7 +493,7 @@ namespace PenTabletNotebook {
                 tagName = mTBTagName.Text;
             }
 
-            for (int i=mLBPageTags.Items.Count-1; 0 <= i; --i) {
+            for (int i = mLBPageTags.Items.Count - 1; 0 <= i; --i) {
                 var pt = mLBPageTags.Items[i] as PageTag;
                 if (pt.PageNr == mPLMgr.CurPageNr) {
                     // 同じページのタグが既にあるので削除。
@@ -492,7 +508,7 @@ namespace PenTabletNotebook {
             for (int i = mLBPageTags.Items.Count - 1; 0 <= i; --i) {
                 var pt = mLBPageTags.Items[i] as PageTag;
                 if (pt.PageNr < mPLMgr.CurPageNr) {
-                    mLBPageTags.Items.Insert(i+1, newPageTag);
+                    mLBPageTags.Items.Insert(i + 1, newPageTag);
                     bAdded = true;
                     break;
                 }
@@ -532,6 +548,33 @@ namespace PenTabletNotebook {
             if (0 <= mLBPageTags.SelectedIndex) {
                 // 選択されたPageTagを削除。
                 mLBPageTags.Items.RemoveAt(mLBPageTags.SelectedIndex);
+            }
+        }
+
+        private void Window_KeyUp(object sender, KeyEventArgs e) {
+            switch (e.Key) {
+            case Key.PageDown:
+                NextPage();
+                e.Handled = true;
+                break;
+            case Key.PageUp:
+                PrevPage();
+                e.Handled = true;
+                break;
+            default:
+                break;
+            }
+        }
+
+        private void Window_MouseWheel(object sender, MouseWheelEventArgs e) {
+            if (0 < e.Delta) {
+                // 上に回す。
+                PrevPage();
+                e.Handled = true;
+            } else if (e.Delta < 0) {
+                // 下に回す。
+                NextPage();
+                e.Handled = true;
             }
         }
     }
