@@ -106,9 +106,9 @@
                             <RowDefinition Height="1*" />
                             <RowDefinition Height="1*" />
                         </Grid.RowDefinitions>
-                        <Label Content="Scale:" HorizontalAlignment="Right" VerticalAlignment="Center" />
-                        <Slider Grid.Column="1" VerticalAlignment="Center" Name="mSliderScaling" Margin="0,0,4,0" Maximum="1.0" Value="0.5" Minimum="0.25" Ticks="0.25 0.375 0.5 0.625 0.75 0.875 1.0" SmallChange="0.125" LargeChange="0.125" TickFrequency="0.125" TickPlacement="Both" IsMoveToPointEnabled="True" />
-                        <CheckBox x:Name="mCBDispDrawings" Grid.Row="1" Grid.ColumnSpan="2" Margin="4,0,0,0" VerticalAlignment="Center" Content="Disp Drawings" IsChecked="True" Checked="CBDispDrawings_Checked" Unchecked="CBDispDrawings_Unchecked" />
+                        <CheckBox x:Name="mCBDispDrawings" Grid.Row="0" Grid.ColumnSpan="2" Margin="4,0,0,0" VerticalAlignment="Center" Content="Display Drawings" IsChecked="True" Checked="CBDispDrawings_Checked" Unchecked="CBDispDrawings_Unchecked" />
+                        <Label Content="Scale:" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                        <Slider Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Name="mSliderScaling" Margin="0,0,4,0" Maximum="2.0" Value="0.5" Minimum="0.25" Ticks="0.25 0.375 0.5 0.625 0.75 0.875 1.0 1.25 1.5 1.75 2.0" SmallChange="0.125" LargeChange="0.125" TickFrequency="0.125" TickPlacement="Both" IsMoveToPointEnabled="True" />
                         <Button Grid.Row="2" Grid.ColumnSpan="2" x:Name="mButtonScaleToFit" Margin="4,0,4,0" Content="Scale to Fit" VerticalAlignment="Center" Click="ButtonScaleToFit_Click" />
                         <Button Grid.Row="3" Grid.ColumnSpan="2" x:Name="mButtonScaleToImageW" Margin="4,0,4,0" Content="Scale to Image Width" VerticalAlignment="Center" Click="ButtonScaleToImageW_Click" />
                     </Grid>
@@ -140,7 +140,7 @@
                             <RowDefinition Height="23" />
                             <RowDefinition Height="1*" />
                         </Grid.RowDefinitions>
-                        <Button Margin="4,0,4,0" x:Name="mButtonTagBack" Content="Back" VerticalAlignment="Center" Click="ButtonTagBack_Click" />
+                        <Button Margin="4,0,4,0" x:Name="mButtonTagBack" Content="Back to the pg before jump" VerticalAlignment="Center" Click="ButtonTagBack_Click" />
                         <Grid Grid.Row="1">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*" />
@@ -149,7 +149,7 @@
                             <Label Content="Name:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                             <TextBox x:Name="mTBTagName" Grid.Column="1" Margin="0,0,4,0" Text="Untitled tag" VerticalContentAlignment="Center" VerticalAlignment="Center" />
                         </Grid>
-                        <Button Grid.Row="2" Margin="4,0,4,0" x:Name="mButtonAddTag" Content="Add Page Tag" VerticalAlignment="Center" Click="ButtonAddTag_Click" />
+                        <Button Grid.Row="2" Margin="4,0,4,0" x:Name="mButtonAddTag" Content="New Page Tag" VerticalAlignment="Center" Click="ButtonAddTag_Click" />
                         <ListBox Grid.Row="3" Margin="0,4,0,0" x:Name="mLBPageTags" SelectionChanged="LBPageTags_SelectionChanged" MouseRightButtonUp="LBPageTags_MouseRightButtonUp" ScrollViewer.VerticalScrollBarVisibility="Visible" />
                     </Grid>
                 </GroupBox>
