@@ -43,42 +43,48 @@
         <GroupBox Grid.Row="1" Header="Settings" Margin="4,0,0,4" Grid.RowSpan="2" >
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="210" />
+                    <RowDefinition Height="80" />
+                    <RowDefinition Height="100"/>
                     <RowDefinition Height="72" />
-                    <RowDefinition Height="100" />
                     <RowDefinition Height="120" />
+                    <RowDefinition Height="118" />
                     <RowDefinition Height="1*" />
                 </Grid.RowDefinitions>
-                <GroupBox Grid.Row="0" Header="Pen Mode">
-                    <StackPanel Orientation="Vertical">
-                        <RadioButton x:Name="mRBPen"    Content="Pen"    Margin="4" IsChecked="True" Checked="RBPen_Checked"/>
-                        <RadioButton x:Name="mRBEraser" Content="Eraser" Margin="4" Checked="RBEraser_Checked"/>
-                        <RadioButton x:Name="mRBSelect" Content="Select" Margin="4" Checked="RBSelect_Checked" />
-                        <GroupBox Header="Color" >
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1*" />
-                                    <ColumnDefinition Width="1*" />
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="1*" />
-                                    <RowDefinition Height="1*" />
-                                    <RowDefinition Height="1*" />
-                                    <RowDefinition Height="1*" />
-                                </Grid.RowDefinitions>
-                                <RadioButton Grid.Row="0" Grid.Column="0" x:Name="mRBCWhite"  Content="White" Margin="4" Checked="RBCWhite_Checked"/>
-                                <RadioButton Grid.Row="1" Grid.Column="0" x:Name="mRBCCyan" Content="Cyan" Margin="4" Checked="RBCCyan_Checked" />
-                                <RadioButton Grid.Row="2" Grid.Column="0" x:Name="mRBCMagenta" Content="Magenta" Margin="4" Checked="RBCMagenta_Checked" />
-                                <RadioButton Grid.Row="3" Grid.Column="0" x:Name="mRBCYellow" Content="Yellow" Margin="4" Checked="RBCYellow_Checked" />
-                                <RadioButton Grid.Row="0" Grid.Column="1" x:Name="mRBCRed" IsChecked="True" Content="Red" Margin="4" Checked="RBCRed_Checked" />
-                                <RadioButton Grid.Row="1" Grid.Column="1" x:Name="mRBCGreen" Content="Green" Margin="4" Checked="RBCGreen_Checked" />
-                                <RadioButton Grid.Row="2" Grid.Column="1" x:Name="mRBCBlue" Content="Blue" Margin="4" Checked="RBCBlue_Checked" />
-                                <RadioButton Grid.Row="3" Grid.Column="1" x:Name="mRBCBlack" Content="Black" Margin="4" Checked="RBCBlack_Checked" />
-                            </Grid>
-                        </GroupBox>
-                    </StackPanel>
+                <GroupBox Grid.Row="0" Header="Pen Mode" >
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                        </Grid.RowDefinitions>
+                        <RadioButton Grid.Row="0" x:Name="mRBPen"    Content="Pen"    Margin="4,0,4,0" VerticalAlignment="Center" IsChecked="True" Checked="RBPen_Checked"/>
+                        <RadioButton Grid.Row="1" x:Name="mRBEraser" Content="Eraser" Margin="4,0,4,0" VerticalAlignment="Center"  Checked="RBEraser_Checked"/>
+                        <RadioButton Grid.Row="2" x:Name="mRBSelect" Content="Select" Margin="4,0,4,0" VerticalAlignment="Center" Checked="RBSelect_Checked" />
+                    </Grid>
                 </GroupBox>
-                <GroupBox Grid.Row="1" Header="Controls" >
+                <GroupBox Grid.Row="1" Header="Color" >
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                        </Grid.RowDefinitions>
+                        <RadioButton Grid.Row="0" Grid.Column="0" x:Name="mRBCWhite"  Content="White" Margin="4,0,4,0" VerticalAlignment="Center" Checked="RBCWhite_Checked"/>
+                        <RadioButton Grid.Row="1" Grid.Column="0" x:Name="mRBCCyan" Content="Cyan" Margin="4,0,4,0" VerticalAlignment="Center" Checked="RBCCyan_Checked" />
+                        <RadioButton Grid.Row="2" Grid.Column="0" x:Name="mRBCMagenta" Content="Magenta" Margin="4,0,4,0" VerticalAlignment="Center" Checked="RBCMagenta_Checked" />
+                        <RadioButton Grid.Row="3" Grid.Column="0" x:Name="mRBCYellow" Content="Yellow" Margin="4,0,4,0" VerticalAlignment="Center" Checked="RBCYellow_Checked" />
+                        <RadioButton Grid.Row="0" Grid.Column="1" x:Name="mRBCRed" IsChecked="True" Content="Red" Margin="4,0,4,0" VerticalAlignment="Center" Checked="RBCRed_Checked" />
+                        <RadioButton Grid.Row="1" Grid.Column="1" x:Name="mRBCGreen" Content="Green" Margin="4,0,4,0" VerticalAlignment="Center" Checked="RBCGreen_Checked" />
+                        <RadioButton Grid.Row="2" Grid.Column="1" x:Name="mRBCBlue" Content="Blue" Margin="4,0,4,0" VerticalAlignment="Center" Checked="RBCBlue_Checked" />
+                        <RadioButton Grid.Row="3" Grid.Column="1" x:Name="mRBCBlack" Content="Black" Margin="4,0,4,0" VerticalAlignment="Center" Checked="RBCBlack_Checked" />
+                    </Grid>
+                </GroupBox>
+                <GroupBox Grid.Row="2" Header="Controls" >
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*" />
@@ -88,7 +94,7 @@
                         <Button Grid.Row="1" x:Name="mButtonRedo" IsEnabled="False" Content="Redo" Margin="4,0,4,0" VerticalAlignment="Center" Click="ButtonRedo_Click"/>
                     </Grid>
                 </GroupBox>
-                <GroupBox Grid.Row="2" Header="Display" >
+                <GroupBox Grid.Row="3" Header="Display" >
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*" />
@@ -98,14 +104,16 @@
                             <RowDefinition Height="1*" />
                             <RowDefinition Height="1*" />
                             <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
                         </Grid.RowDefinitions>
                         <Label Content="Scale:" HorizontalAlignment="Right" VerticalAlignment="Center" />
-                        <Slider Grid.Column="1" VerticalAlignment="Center" Name="mSliderScaling" Maximum="1.0" Value="0.47" Minimum="0.3" Ticks="0.3 0.47 0.5 0.625 0.75 0.875 1.0" SmallChange="0.125" LargeChange="0.125" TickFrequency="0.125" TickPlacement="Both" />
+                        <Slider Grid.Column="1" VerticalAlignment="Center" Name="mSliderScaling" Margin="0,0,4,0" Maximum="1.0" Value="0.5" Minimum="0.25" Ticks="0.25 0.375 0.5 0.625 0.75 0.875 1.0" SmallChange="0.125" LargeChange="0.125" TickFrequency="0.125" TickPlacement="Both" IsMoveToPointEnabled="True" />
                         <CheckBox x:Name="mCBDispDrawings" Grid.Row="1" Grid.ColumnSpan="2" Margin="4,0,0,0" VerticalAlignment="Center" Content="Disp Drawings" IsChecked="True" Checked="CBDispDrawings_Checked" Unchecked="CBDispDrawings_Unchecked" />
                         <Button Grid.Row="2" Grid.ColumnSpan="2" x:Name="mButtonScaleToFit" Margin="4,0,4,0" Content="Scale to Fit" VerticalAlignment="Center" Click="ButtonScaleToFit_Click" />
+                        <Button Grid.Row="3" Grid.ColumnSpan="2" x:Name="mButtonScaleToImageW" Margin="4,0,4,0" Content="Scale to Image Width" VerticalAlignment="Center" Click="ButtonScaleToImageW_Click" />
                     </Grid>
                 </GroupBox>
-                <GroupBox Grid.Row="3" Header="Page Control" >
+                <GroupBox Grid.Row="4" Header="Page Control" >
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*" />
@@ -124,7 +132,7 @@
                         <Button x:Name="mButtonClearDrawings" Grid.Row="3" Grid.ColumnSpan="3" Margin="4,0,4,0" VerticalAlignment="Center" Content="Clear Drawings" Click="ButtonClearDrawings_Click" />
                     </Grid>
                 </GroupBox>
-                <GroupBox Grid.Row="4" Header="Page Tags" >
+                <GroupBox Grid.Row="5" Header="Page Tags" >
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="23" />
@@ -139,7 +147,7 @@
                                 <ColumnDefinition Width="2.5*" />
                             </Grid.ColumnDefinitions>
                             <Label Content="Name:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                            <TextBox x:Name="mTBTagName" Grid.Column="1" Text="Untitled tag" VerticalContentAlignment="Center" VerticalAlignment="Center" />
+                            <TextBox x:Name="mTBTagName" Grid.Column="1" Margin="0,0,4,0" Text="Untitled tag" VerticalContentAlignment="Center" VerticalAlignment="Center" />
                         </Grid>
                         <Button Grid.Row="2" Margin="4,0,4,0" x:Name="mButtonAddTag" Content="Add Page Tag" VerticalAlignment="Center" Click="ButtonAddTag_Click" />
                         <ListBox Grid.Row="3" Margin="0,4,0,0" x:Name="mLBPageTags" SelectionChanged="LBPageTags_SelectionChanged" MouseRightButtonUp="LBPageTags_MouseRightButtonUp" ScrollViewer.VerticalScrollBarVisibility="Visible" />
@@ -148,7 +156,7 @@
             </Grid>
         </GroupBox>
         <GroupBox Grid.RowSpan="2" Grid.Column="1" Header="Canvas" Margin="0,0,4,0" >
-            <ScrollViewer x:Name="mSVCanvas" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
+            <ScrollViewer x:Name="mSVCanvas" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" >
                 <Grid x:Name="mGridCanvas" Background="#FFC0C0C0" MouseMove="Canvas_MouseMove" MouseLeftButtonDown="Canvas_MouseLeftButtonDown" MouseLeftButtonUp="Canvas_MouseLeftButtonUp" MouseRightButtonUp="Canvas_MouseRightButtonUp" Cursor="Cross" >
                     <Grid.LayoutTransform>
                         <TransformGroup>

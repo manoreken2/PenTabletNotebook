@@ -133,6 +133,15 @@ namespace PenTabletNotebook {
             AddToCanvas(c);
         }
 
+        public override void MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+
+            var msePos = e.GetPosition(mCanvas);
+
+            Console.WriteLine("MLDn {0}, {1}", msePos.X, msePos.Y);
+
+            mPathFig.StartPoint = msePos;
+        }
+
         public override void MouseMove(object sender, MouseEventArgs e) {
             if (e.LeftButton != MouseButtonState.Pressed) {
                 return;
@@ -147,16 +156,16 @@ namespace PenTabletNotebook {
 
             var msePos = e.GetPosition(mCanvas);
 
-            Console.WriteLine("MM L {0}, {1}", msePos.X, msePos.Y);
+            if (1 <= mPolyLineSegment.Points.Count) { 
+                var lastPos = mPolyLineSegment.Points[mPolyLineSegment.Points.Count - 1];
+                var lastToCur = msePos - lastPos;
+                //Console.WriteLine("MM L {0}, {1}, len={2}", msePos.X, msePos.Y, lastToCur.Length);
 
-            /*
-            var lastPos = mPolyLineSegment.Points[mPolyLineSegment.Points.Count - 1];
-            var lastToCur = msePos - lastPos;
-            if (lastToCur.Length < 1.0) {
-                // 最後の点が近い場合追加しない。
-                return;
+                if (lastToCur.Length < 1.3) {
+                    // 最後の点が近い場合追加しない。
+                    return;
+                }
             }
-            */
 
             mPolyLineSegment.Points.Add(msePos);
         }
@@ -180,15 +189,6 @@ namespace PenTabletNotebook {
             Console.WriteLine("MLUp {0}, {1}", msePos.X, msePos.Y);
 
             mPolyLineSegment.Points.Add(msePos);
-        }
-
-        public override void MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-
-            var msePos = e.GetPosition(mCanvas);
-
-            Console.WriteLine("MLDn {0}, {1}", msePos.X, msePos.Y);
-
-            mPathFig.StartPoint = msePos;
         }
 
         public override void Save(System.IO.BinaryWriter bw) {

@@ -69,6 +69,16 @@ namespace PenTabletNotebook {
 
             mButtonTagBack.IsEnabled = 0 <= mPageNrBeforeJump && mPageNrBeforeJump < mPLMgr.PageCount;
 
+            // タグに該当ページがあるときタグを選択状態にします。
+            for (int i=0; i<mLBPageTags.Items.Count; ++i) {
+                var pt = mLBPageTags.Items[i] as PageTag;
+                if (pt.PageNr == mPLMgr.CurPageNr) {
+                    mLBPageTags.SelectedIndex = i;
+                    mLBPageTags.ScrollIntoView(pt);
+                    break;
+                }
+            }
+
             UpdateWindowTitle();
         }
 
@@ -268,10 +278,24 @@ namespace PenTabletNotebook {
         }
 
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            {
+                // マウスをキャプチャーします。
+                var el = sender as UIElement;
+                el.CaptureMouse();
+            }
+
             mPLMgr.DOMgr.MouseLeftButtonDown(sender, e);
         }
 
         private void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            {
+                var el = sender as UIElement;
+                if (el.IsMouseCaptured) {
+                    // キャプチャー解除。
+                    el.ReleaseMouseCapture();
+                }
+            }
+
             mPLMgr.DOMgr.MouseLeftButtonUp(sender, e);
             UpdateUI();
         }
@@ -579,14 +603,31 @@ namespace PenTabletNotebook {
         }
 
         private void ButtonScaleToFit_Click(object sender, RoutedEventArgs e) {
-            double scaleX = mSVCanvas.ActualWidth  / mImage.Width;
-            double scaleY = mSVCanvas.ActualHeight / mImage.Height;
+            double imageW = mImage.ActualWidth;
+            if (imageW <= 0) {
+                imageW = mImage.Width;
+            }
+            double imageH = mImage.ActualHeight;
+            if (imageH <= 0) {
+                imageH = mImage.Height;
+            }
+
+            double scaleX = mSVCanvas.ViewportWidth  / imageW;
+            double scaleY = mSVCanvas.ViewportHeight / imageH;
             if (scaleX < scaleY) {
                 mSliderScaling.Value = scaleX;
             } else {
                 mSliderScaling.Value = scaleY;
             }
+        }
 
+        private void ButtonScaleToImageW_Click(object sender, RoutedEventArgs e) {
+            double imageW = mImage.ActualWidth;
+            if (imageW <= 0) {
+                imageW = mImage.Width;
+            }
+            double scaleX = mSVCanvas.ViewportWidth / imageW;
+            mSliderScaling.Value = scaleX;
         }
     }
 }
