@@ -22,7 +22,7 @@
             <RowDefinition Height="53"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="205"/>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
         <Menu x:Name="mMenu" >
@@ -40,7 +40,20 @@
                 <MenuItem x:Name="mMenuItemEditRedo" Command="Redo" Header="_Redo" />
             </MenuItem>
         </Menu>
-        <GroupBox Grid.Row="1" Header="Settings" Margin="4,0,0,4" Grid.RowSpan="2" >
+        <GridSplitter Grid.Column="0" Grid.RowSpan="3" Width="5" ResizeDirection="Columns" Background="#FFD4D4D4" >
+            <GridSplitter.Template>
+                <ControlTemplate TargetType="{x:Type GridSplitter}">
+                    <Grid>
+                        <TextBlock
+          HorizontalAlignment="Center"
+          VerticalAlignment="Center"
+          Text="⁞" FontSize="16" Foreground="#FF919191" />
+                        <Rectangle Fill="#00FFFFFF" />
+                    </Grid>
+                </ControlTemplate>
+            </GridSplitter.Template>
+        </GridSplitter>
+        <GroupBox Grid.Row="1" Header="Settings" Margin="4,0,5,4" Grid.RowSpan="2" >
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="80" />
@@ -149,7 +162,7 @@
                             <Label Content="Name:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                             <TextBox x:Name="mTBTagName" Grid.Column="1" Margin="0,0,4,0" Text="Untitled tag" VerticalContentAlignment="Center" VerticalAlignment="Center" />
                         </Grid>
-                        <Button Grid.Row="2" Margin="4,0,4,0" x:Name="mButtonAddTag" Content="New Page Tag" VerticalAlignment="Center" Click="ButtonAddTag_Click" />
+                        <Button Grid.Row="2" Margin="4,0,4,0" x:Name="mButtonAddTag" Content="New or Update Tag" VerticalAlignment="Center" Click="ButtonAddTag_Click" />
                         <ListBox Grid.Row="3" Margin="0,4,0,0" x:Name="mLBPageTags" SelectionChanged="LBPageTags_SelectionChanged" MouseRightButtonUp="LBPageTags_MouseRightButtonUp" ScrollViewer.VerticalScrollBarVisibility="Visible" />
                     </Grid>
                 </GroupBox>
