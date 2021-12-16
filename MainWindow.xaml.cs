@@ -30,15 +30,6 @@ namespace PenTabletNotebook {
             Title = s;
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e) {
-            // デフォルトのペンの色は赤。
-            mPLMgr = new PageListMgr(mCanvas, mImage, new SolidColorBrush(Colors.Red));
-            mRBCRed.IsChecked = true;
-
-            mInitialized = true;
-            UpdateUI();
-        }
-
         private void Undo() {
             mPLMgr.DOMgr.Undo();
             UpdateUI();
@@ -97,7 +88,7 @@ namespace PenTabletNotebook {
             return true;
         }
 
-        private bool Load() {
+        private bool OpenFileDialogAndLoad() {
             // OpenFileDialogを開いて開くファイル名を取得。
             var ofd = new OpenFileDialog();
             ofd.DefaultExt = DefaultExt;
@@ -106,7 +97,13 @@ namespace PenTabletNotebook {
             if (r != true) {
                 return false;
             }
+
             string path = ofd.FileName;
+
+            return LoadSpecifiedFile(path);
+        }
+
+        private bool LoadSpecifiedFile(string path) {
             var ptList = new List<PageTag>();
             bool result = mPLMgr.Load(path, ref ptList);
             if (result) {
@@ -208,6 +205,27 @@ namespace PenTabletNotebook {
             ChangePage(newPgNr);
         }
 
+        // アプリ起動 ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+
+        private void Window_Loaded(object sender, RoutedEventArgs e) {
+            // デフォルトのペンの色は赤。
+            mPLMgr = new PageListMgr(mCanvas, mImage, new SolidColorBrush(Colors.Red));
+            mRBCRed.IsChecked = true;
+
+            mInitialized = true;
+            UpdateUI();
+
+            var args = System.Environment.GetCommandLineArgs();
+            if (1 < args.Length) {
+                var path = args[1];
+
+                if (0 == ".ptnb".CompareTo(System.IO.Path.GetExtension(path))) {
+                    // 第1引数のファイルを開きます。
+                    LoadSpecifiedFile(path);
+                }
+            }
+        }
+
         // File menu ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
         private void MenuItemFileNew_Click(object sender, RoutedEventArgs e) {
@@ -216,7 +234,7 @@ namespace PenTabletNotebook {
 
         private void MenuItemFileOpen_Click(object sender, RoutedEventArgs e) {
             // ファイルからロードします。
-            Load();
+            OpenFileDialogAndLoad();
         }
 
         private void MenuItemFileSave_Click(object sender, RoutedEventArgs e) {
