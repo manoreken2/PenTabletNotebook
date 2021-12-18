@@ -12,6 +12,53 @@ namespace PenTabletNotebook {
     public partial class MainWindow : Window, IHitObjectMoved {
         public MainWindow() {
             InitializeComponent();
+            LocalizeUI();
+        }
+
+        private void LocalizeUI() {
+            mMenuItemFile.Header = Properties.Resources.File;
+            mMenuItemFileNew.Header = Properties.Resources.FileNew;
+            mMenuItemFileOpen.Header = Properties.Resources.FileOpen;
+            mMenuItemFileAddImg.Header = Properties.Resources.FileAddImg;
+            mMenuItemFileSave.Header = Properties.Resources.FileSave;
+            mMenuItemFileSaveAs.Header = Properties.Resources.FileSaveAs;
+            mMenuItemFileExit.Header = Properties.Resources.FileExit;
+            mMenuItemEdit.Header = Properties.Resources.Edit;
+            mMenuItemEditUndo.Header = Properties.Resources.EditUndo;
+            mMenuItemEditRedo.Header = Properties.Resources.EditRedo;
+            mGroupBoxSettings.Header = Properties.Resources.Settings;
+            mGroupBoxPenMode.Header = Properties.Resources.PenMode;
+            mRBPenEraser.Content = Properties.Resources.PenEraser;
+            mRBEraser.Content = Properties.Resources.Eraser;
+            mGroupBoxPenThickness.Header = Properties.Resources.PenThickness;
+            mGroupBoxColor.Header = Properties.Resources.Color;
+            mRBCWhite.Content = Properties.Resources.White;
+            mRBCCyan.Content = Properties.Resources.Cyan;
+            mRBCMagenta.Content = Properties.Resources.Magenta;
+            mRBCYellow.Content = Properties.Resources.Yellow;
+            mRBCRed.Content = Properties.Resources.Red;
+            mRBCGreen.Content = Properties.Resources.Green;
+            mRBCBlue.Content = Properties.Resources.Blue;
+            mRBCBlack.Content = Properties.Resources.Black;
+            mGroupBoxDisplay.Header = Properties.Resources.Display;
+            mCBDispDrawings.Content = Properties.Resources.DispDrawings;
+            mLabelScale.Content = Properties.Resources.Scale + ":";
+            mButtonScaleToImageW.Content = Properties.Resources.ScaleToImageWidth;
+            mButtonScaleToFit.Content = Properties.Resources.ScaleToFit;
+            mGroupBoxPageControl.Header = Properties.Resources.PageControl;
+            mButtonSetImage.Content = Properties.Resources.SetImage;
+            mButtonDeletePage.Content = Properties.Resources.DeletePage;
+            mButtonAddNewPage.Content = Properties.Resources.AddNewPage;
+            mButtonClearDrawings.Content = Properties.Resources.ClearDrawings;
+            mGroupBoxPageTags.Header = Properties.Resources.PageTags;
+            mButtonTagBack.Content = Properties.Resources.BackBeforeJump;
+            mLabelName.Content = Properties.Resources.Name + ":";
+            mButtonAddTag.Content = Properties.Resources.NewOrUpdateTag;
+            mGroupBoxPageNumber.Header = Properties.Resources.PageNumber;
+            mLabelPage.Content = Properties.Resources.Page + ":";
+            mButtonPrev.Content = Properties.Resources.Prev;
+            mButtonNext.Content = Properties.Resources.Next;
+            mGroupBoxCanvas.Header = Properties.Resources.Canvas;
         }
 
         private bool mInitialized = false;

@@ -26,7 +26,7 @@
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
         <Menu x:Name="mMenu" >
-            <MenuItem Header="_File" >
+            <MenuItem x:Name="mMenuItemFile" Header="_File" >
                 <MenuItem x:Name="mMenuItemFileNew" Command="New" Header="_New"  />
                 <MenuItem x:Name="mMenuItemFileOpen" Command="Open" Header="_Open file ..."  />
                 <MenuItem x:Name="mMenuItemFileAddImg" Header="Add images..."  Click="MenuItemFileAddImg_Click" />
@@ -35,7 +35,7 @@
                 <Separator/>
                 <MenuItem x:Name="mMenuItemFileExit" Command="Close" Header="E_xit" Click="MenuItemFileExit_Click" />
             </MenuItem>
-            <MenuItem Header="_Edit" >
+            <MenuItem x:Name="mMenuItemEdit" Header="_Edit" >
                 <MenuItem x:Name="mMenuItemEditUndo" Command="Undo" Header="_Undo" />
                 <MenuItem x:Name="mMenuItemEditRedo" Command="Redo" Header="_Redo" />
             </MenuItem>
@@ -53,7 +53,7 @@
                 </ControlTemplate>
             </GridSplitter.Template>
         </GridSplitter>
-        <GroupBox Grid.Row="1" Header="Settings" Margin="4,0,5,4" Grid.RowSpan="2" >
+        <GroupBox x:Name="mGroupBoxSettings" Grid.Row="1" Header="Settings" Margin="4,0,5,4" Grid.RowSpan="2" >
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="60" />
@@ -63,17 +63,17 @@
                     <RowDefinition Height="118" />
                     <RowDefinition Height="1*" />
                 </Grid.RowDefinitions>
-                <GroupBox Grid.Row="0" Header="Pen Mode" >
+                <GroupBox x:Name="mGroupBoxPenMode" Grid.Row="0" Header="Pen Mode" >
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*" />
                             <RowDefinition Height="1*" />
                         </Grid.RowDefinitions>
-                        <RadioButton Grid.Row="0" x:Name="mRBPen"    Content="Pen / Eraser"    Margin="4,0,4,0" VerticalAlignment="Center" IsChecked="True" Checked="RBPen_Checked"/>
+                        <RadioButton Grid.Row="0" x:Name="mRBPenEraser"    Content="Pen / Eraser"    Margin="4,0,4,0" VerticalAlignment="Center" IsChecked="True" Checked="RBPen_Checked"/>
                         <RadioButton Grid.Row="1" x:Name="mRBEraser" Content="Eraser" Margin="4,0,4,0" VerticalAlignment="Center"                  Checked="RBEraser_Checked"/>
                     </Grid>
                 </GroupBox>
-                <GroupBox Grid.Row="1" Header="Pen Thickness" >
+                <GroupBox x:Name="mGroupBoxPenThickness" Grid.Row="1" Header="Pen Thickness" >
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*" />
@@ -92,7 +92,7 @@
                         <RadioButton Grid.Row="2" Grid.Column="1" x:Name="mRBT12" Content="12" Margin="4,0,4,0" VerticalAlignment="Center" Checked="RBT12_Checked" />
                     </Grid>
                 </GroupBox>
-                <GroupBox Grid.Row="2" Header="Color" >
+                <GroupBox x:Name="mGroupBoxColor" Grid.Row="2" Header="Color" >
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*" />
@@ -114,7 +114,7 @@
                         <RadioButton Grid.Row="3" Grid.Column="1" x:Name="mRBCBlack" Content="Black" Margin="4,0,4,0" VerticalAlignment="Center" Checked="RBCBlack_Checked" />
                     </Grid>
                 </GroupBox>
-                <GroupBox Grid.Row="3" Header="Display" >
+                <GroupBox x:Name="mGroupBoxDisplay" Grid.Row="3" Header="Display" >
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*" />
@@ -127,13 +127,13 @@
                             <RowDefinition Height="1*" />
                         </Grid.RowDefinitions>
                         <CheckBox x:Name="mCBDispDrawings" Grid.Row="0" Grid.ColumnSpan="2" Margin="4,0,0,0" VerticalAlignment="Center" Content="Display Drawings" IsChecked="True" Checked="CBDispDrawings_Checked" Unchecked="CBDispDrawings_Unchecked" />
-                        <Label Content="Scale:" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                        <Label x:Name="mLabelScale" Content="Scale:" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" />
                         <Slider Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Name="mSliderScaling" Margin="0,0,4,0" Maximum="2.0" Value="0.5" Minimum="0.25" Ticks="0.25 0.375 0.5 0.625 0.75 0.875 1.0 1.25 1.5 1.75 2.0" SmallChange="0.125" LargeChange="0.125" TickFrequency="0.125" TickPlacement="Both" IsMoveToPointEnabled="True" />
                         <Button Grid.Row="2" Grid.ColumnSpan="2" x:Name="mButtonScaleToImageW" Margin="4,0,4,0" Content="Scale to Image Width" VerticalAlignment="Center" Click="ButtonScaleToImageW_Click" />
                         <Button Grid.Row="3" Grid.ColumnSpan="2" x:Name="mButtonScaleToFit" Margin="4,0,4,0" Content="Scale to Fit" VerticalAlignment="Center" Click="ButtonScaleToFit_Click" />
                     </Grid>
                 </GroupBox>
-                <GroupBox Grid.Row="4" Header="Page Control" >
+                <GroupBox x:Name="mGroupBoxPageControl" Grid.Row="4" Header="Page Control" >
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*" />
@@ -152,7 +152,7 @@
                         <Button x:Name="mButtonClearDrawings" Grid.Row="3" Grid.ColumnSpan="3" Margin="4,0,4,0" VerticalAlignment="Center" Content="Clear Drawings" Click="ButtonClearDrawings_Click" />
                     </Grid>
                 </GroupBox>
-                <GroupBox Grid.Row="5" Header="Page Tags" >
+                <GroupBox x:Name="mGroupBoxPageTags" Grid.Row="5" Header="Page Tags" >
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="23" />
@@ -166,7 +166,7 @@
                                 <ColumnDefinition Width="1*" />
                                 <ColumnDefinition Width="2.5*" />
                             </Grid.ColumnDefinitions>
-                            <Label Content="Name:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            <Label x:Name="mLabelName" Content="Name:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                             <TextBox x:Name="mTBTagName" Grid.Column="1" Margin="0,0,4,0" Text="Untitled tag" VerticalContentAlignment="Center" VerticalAlignment="Center" />
                         </Grid>
                         <Button Grid.Row="2" Margin="4,0,4,0" x:Name="mButtonAddTag" Content="New or Update Tag" VerticalAlignment="Center" Click="ButtonAddTag_Click" />
@@ -175,7 +175,7 @@
                 </GroupBox>
             </Grid>
         </GroupBox>
-        <GroupBox Grid.RowSpan="2" Grid.Column="1" Header="Canvas" Margin="0,0,4,0" >
+        <GroupBox x:Name="mGroupBoxCanvas" Grid.RowSpan="2" Grid.Column="1" Header="Canvas" Margin="0,0,4,0" >
             <ScrollViewer x:Name="mSVCanvas" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" >
                 <Grid x:Name="mGridCanvas" Background="#FFC0C0C0">
                     <Grid.LayoutTransform>
@@ -189,7 +189,7 @@
                 </Grid>
             </ScrollViewer>
         </GroupBox>
-        <GroupBox Margin="0,0,4,4" Grid.Column="1" Grid.Row="2" Header="Page Number" >
+        <GroupBox x:Name="mGroupBoxPageNumber" Margin="0,0,4,4" Grid.Column="1" Grid.Row="2" Header="Page Number" >
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="50" />
@@ -199,7 +199,7 @@
                     <ColumnDefinition Width="50" />
                     <ColumnDefinition Width="1*" />
                 </Grid.ColumnDefinitions>
-                <Label Content="Page:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <Label x:Name="mLabelPage" Content="Page:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                 <TextBox Grid.Column="1" Text="1" Name="mTBPageNr" VerticalAlignment="Center" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" TextChanged="TBPageNr_TextChanged" />
                 <Label Grid.Column="2" Content="/ 0" Name="mLabelTotalPages" VerticalAlignment="Center" />
                 <Button Grid.Column="3" x:Name="mButtonPrev" IsEnabled="False" Content="Prev" Margin="0,0,4,0" VerticalAlignment="Center" Click="ButtonPrevPage_Click"/>

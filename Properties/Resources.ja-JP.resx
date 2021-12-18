@@ -118,40 +118,40 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AddNewPage" xml:space="preserve">
-    <value>Add New Page</value>
+    <value>新規ページ作成</value>
   </data>
   <data name="BackBeforeJump" xml:space="preserve">
-    <value>Back to the pg before Jump</value>
+    <value>付箋ジャンプ前に移動</value>
   </data>
   <data name="Black" xml:space="preserve">
-    <value>Black</value>
+    <value>黒</value>
   </data>
   <data name="Blue" xml:space="preserve">
-    <value>Blue</value>
+    <value>青</value>
   </data>
   <data name="Canvas" xml:space="preserve">
-    <value>Canvas</value>
+    <value>キャンバス</value>
   </data>
   <data name="ClearDrawings" xml:space="preserve">
-    <value>Clear Drawings</value>
+    <value>ペン描画削除</value>
   </data>
   <data name="Color" xml:space="preserve">
-    <value>Color</value>
+    <value>色</value>
   </data>
   <data name="Cyan" xml:space="preserve">
-    <value>Cyan</value>
+    <value>シアン</value>
   </data>
   <data name="DeletePage" xml:space="preserve">
-    <value>Delete Page</value>
+    <value>ページ削除</value>
   </data>
   <data name="DispDrawings" xml:space="preserve">
-    <value>Display Drawings</value>
+    <value>ペン描画表示</value>
   </data>
   <data name="Display" xml:space="preserve">
-    <value>Display</value>
+    <value>表示</value>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>_Edit</value>
+    <value>編集(_E)</value>
   </data>
   <data name="EditRedo" xml:space="preserve">
     <value>_Redo</value>
@@ -160,90 +160,90 @@
     <value>_Undo</value>
   </data>
   <data name="Eraser" xml:space="preserve">
-    <value>Eraser</value>
+    <value>消しゴム</value>
   </data>
   <data name="File" xml:space="preserve">
-    <value>_File</value>
+    <value>ファイル(_F)</value>
   </data>
   <data name="FileAddImg" xml:space="preserve">
-    <value>Add _images...</value>
+    <value>画像を貼る(_I)</value>
   </data>
   <data name="FileExit" xml:space="preserve">
-    <value>E_xit</value>
+    <value>終了(_X)</value>
   </data>
   <data name="FileNew" xml:space="preserve">
-    <value>_New</value>
+    <value>新規作成(_N)</value>
   </data>
   <data name="FileOpen" xml:space="preserve">
-    <value>_Open</value>
+    <value>開く(_O)</value>
   </data>
   <data name="FileSave" xml:space="preserve">
-    <value>_Save</value>
+    <value>保存(_S)</value>
   </data>
   <data name="FileSaveAs" xml:space="preserve">
-    <value>Save _As</value>
+    <value>名前を付けて保存(_A)</value>
   </data>
   <data name="Green" xml:space="preserve">
-    <value>Green</value>
+    <value>緑</value>
   </data>
   <data name="Magenta" xml:space="preserve">
-    <value>Magenta</value>
+    <value>マゼンタ</value>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Name</value>
+    <value>付箋名</value>
   </data>
   <data name="NewOrUpdateTag" xml:space="preserve">
-    <value>New or Update Tag</value>
+    <value>付箋作成・更新</value>
   </data>
   <data name="Next" xml:space="preserve">
-    <value>Next</value>
+    <value>次</value>
   </data>
   <data name="Page" xml:space="preserve">
-    <value>Page</value>
+    <value>ページ</value>
   </data>
   <data name="PageControl" xml:space="preserve">
-    <value>Page Control</value>
+    <value>ページ制御</value>
   </data>
   <data name="PageNumber" xml:space="preserve">
-    <value>Page Number</value>
+    <value>ページ番号</value>
   </data>
   <data name="PageTags" xml:space="preserve">
-    <value>Page Tags</value>
+    <value>ページ付箋</value>
   </data>
   <data name="PenEraser" xml:space="preserve">
-    <value>Pen / Erase</value>
+    <value>ペン / 消しゴム</value>
   </data>
   <data name="PenMode" xml:space="preserve">
-    <value>Pen Mode</value>
+    <value>ペン切り替え</value>
   </data>
   <data name="PenThickness" xml:space="preserve">
-    <value>Pen Thickness</value>
+    <value>ペンの太さ</value>
   </data>
   <data name="Prev" xml:space="preserve">
-    <value>Prev</value>
+    <value>前</value>
   </data>
   <data name="Red" xml:space="preserve">
-    <value>Red</value>
+    <value>赤</value>
   </data>
   <data name="Scale" xml:space="preserve">
-    <value>Scale</value>
+    <value>拡大</value>
   </data>
   <data name="ScaleToFit" xml:space="preserve">
-    <value>Scale to Fit</value>
+    <value>画像に合わせて拡大</value>
   </data>
   <data name="ScaleToImageWidth" xml:space="preserve">
-    <value>Scale to Image Width</value>
+    <value>画像の幅に合わせて拡大</value>
   </data>
   <data name="SetImage" xml:space="preserve">
-    <value>Set Image</value>
+    <value>画像を貼る</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>設定</value>
   </data>
   <data name="White" xml:space="preserve">
-    <value>White</value>
+    <value>白</value>
   </data>
   <data name="Yellow" xml:space="preserve">
-    <value>Yellow</value>
+    <value>黄</value>
   </data>
 </root>
