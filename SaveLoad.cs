@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace PenTabletNotebook {
     class SaveLoad {
         const int FILE_FOURCC = 0x424e5450;
-        const int FILE_VERSION = 5;
+        public const int FILE_VERSION = 6;
 
         List<DOPage> mPageList = new List<DOPage>();
         List<PageTag> mPageTagList = new List<PageTag>();
@@ -106,9 +106,9 @@ namespace PenTabletNotebook {
                         Console.WriteLine("FourCC mismatch error {0:x8} should be {1:x8}", fourcc, FILE_FOURCC);
                         return false;
                     }
-                    int version = br.ReadInt32();
-                    if (4 != version && FILE_VERSION != version) {
-                        Console.WriteLine("Version unsupported {0} should be {1}", version, FILE_VERSION);
+                    int fileVer = br.ReadInt32();
+                    if (4 != fileVer && 5 != fileVer && FILE_VERSION != fileVer) {
+                        Console.WriteLine("Version unsupported {0} should be {1}", fileVer, FILE_VERSION);
                         return false;
                     }
 
@@ -118,7 +118,7 @@ namespace PenTabletNotebook {
                     string savePath = DeserializeString(br);
                     string saveDir = System.IO.Path.GetDirectoryName(savePath);
 
-                    if (5 <= version) {
+                    if (5 <= fileVer) {
                         // PageTagを読み出し。
                         int ptCount = br.ReadInt32();
                         for (int i=0; i<ptCount; ++i) {
@@ -136,7 +136,7 @@ namespace PenTabletNotebook {
 
                     for (int i=0; i<plCount; ++i) {
                         var p = new DOPage();
-                        p.Load(br, saveDir, loadDir);
+                        p.Load(fileVer, br, saveDir, loadDir);
                         Console.WriteLine("Page {0} loaded. {1}", i, System.IO.Path.GetFileName(p.ImgFilename));
                         sc.pageList.Add(p);
                     }

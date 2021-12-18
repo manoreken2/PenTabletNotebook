@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Ink;
 
 namespace PenTabletNotebook {
     class DOPage {
@@ -20,6 +21,13 @@ namespace PenTabletNotebook {
         private System.IO.MemoryStream mMStream;
         private long mStreamBytes = 0;
 
+        /// <summary>
+        /// mStreamのバージョン。
+        /// </summary>
+        private int mStreamFileVersion;
+
+        private StrokeCollection mStrokeCollection = new StrokeCollection();
+
         System.IO.BinaryWriter mBW;
         System.IO.BinaryReader mBR;
 
@@ -34,7 +42,7 @@ namespace PenTabletNotebook {
         public bool Save(System.IO.BinaryWriter bw) {
             if (mStreamBytes == 0) {
                 // ページが追加されたが一度も表示されなかった場合。
-                Serialize(new List<DrawObj>());
+                Serialize(new List<DrawObj>(), mStrokeCollection);
             }
 
             var b = mMStream.ToArray();
@@ -50,18 +58,20 @@ namespace PenTabletNotebook {
             return true;
         }
 
-        public void Load(System.IO.BinaryReader br, string saveDir, string loadDir) {
-            // brから読んで、mMStreamに保持します。
+        public void Load(int fileVersion, System.IO.BinaryReader br, string saveDir, string loadDir) {
+            // brから読んでメモリ上にバッファbを作成。
             int bytes = br.ReadInt32();
             var b = br.ReadBytes(bytes);
 
+            // mStreamにバッファbを書き込みます。
             mMStream = new System.IO.MemoryStream();
             mBW = new System.IO.BinaryWriter(mMStream);
-            mBR = new System.IO.BinaryReader(mMStream);
             mBW.Write(b);
-            mBW.Seek(0, System.IO.SeekOrigin.Begin);
 
-            Deserialize(null);
+            // バッファbのメモリストリームから内容を読み出し。
+            mBR = new System.IO.BinaryReader(mMStream);
+            mBW.Seek(0, System.IO.SeekOrigin.Begin);
+            Deserialize(fileVersion, null, null);
 
             if (!saveDir.Equals(loadDir) && mImgFilename.StartsWith(saveDir)) {
                 // mImgFilenameがsaveDirを含む場合、loadDirに置き換えます。
@@ -73,7 +83,7 @@ namespace PenTabletNotebook {
         /// <summary>
         /// ページ情報を内部のMemoryStreamに貯めこみます。
         /// </summary>
-        public bool Serialize(IEnumerable<DrawObj> doList) {
+        public bool Serialize(IEnumerable<DrawObj> doList, StrokeCollection strokeCollection) {
             System.Diagnostics.Debug.Assert(doList != null);
 
             {
@@ -82,6 +92,8 @@ namespace PenTabletNotebook {
                 // fnBytes 画像ファイル名
                 // 4       DrawObjの数dCount
                 // dCount個のDrawObj
+                // 4       inkCanvasの情報バイト数。
+                // inkCanvasの情報。
 
                 mBW.Write(FOURCC);
 
@@ -103,12 +115,26 @@ namespace PenTabletNotebook {
                     }
                 }
 
+                // inkCanvasの情報書き込み。
+                using (var icMS = new System.IO.MemoryStream()) {
+                    strokeCollection.Save(icMS);
+
+                    int icBytes = (int)icMS.Length;
+                    var icData = icMS.ToArray();
+
+                    mBW.Write(icBytes);
+                    mBW.Write(icData);
+                }
+
                 // Streamの有効データバイト数。
                 mStreamBytes = mBW.BaseStream.Position;
 
                 mBW.Seek(0, System.IO.SeekOrigin.Begin);
 
                 // ストリームをクローズするとmMemStreamが消えるのでクローズしない。
+
+                // このフォーマットのバージョンを保持。
+                mStreamFileVersion = SaveLoad.FILE_VERSION;
             }
 
             return true;
@@ -118,7 +144,15 @@ namespace PenTabletNotebook {
         /// 内部に蓄えられたMemoryStreamからDrawObjとImageFilenameを実体化します。
         /// </summary>
         /// <param name="canvas">キャンバスに登録しない場合nullを指定します。</param>
-        public IEnumerable<DrawObj> Deserialize(Canvas canvas) {
+        public IEnumerable<DrawObj> Deserialize(int fileVersion, Canvas canvas, InkCanvas inkCanvas) {
+            if (0 <= fileVersion) {
+                // ストリームファイルバージョンを更新。
+                mStreamFileVersion = fileVersion;
+            } else {
+                // 最後にストリームを書き込んだ時のバージョン番号を使用。
+                fileVersion = mStreamFileVersion;
+            }
+
             var r = new List<DrawObj>();
             {
                 mBR.BaseStream.Seek(0, System.IO.SeekOrigin.Begin);
@@ -141,6 +175,22 @@ namespace PenTabletNotebook {
                 for (int i=0; i<dCount; ++i) {
                     var d = DrawObjNew.Load(mBR, canvas);
                     r.Add(d);
+                }
+
+                if (6 <= fileVersion) {
+                    // inkCanvasの情報読み出し。
+                    int icBytes = mBR.ReadInt32();
+                    var icData = mBR.ReadBytes(icBytes);
+
+                    using (var icMS = new System.IO.MemoryStream(icData)) {
+                        mStrokeCollection = new StrokeCollection(icMS);
+                        if (inkCanvas != null) {
+                            inkCanvas.Strokes = mStrokeCollection;
+                        }
+                    }
+                } else {
+                    // inkCanvasの情報なし。
+                    mStrokeCollection = new StrokeCollection();
                 }
 
                 mBR.BaseStream.Seek(0, System.IO.SeekOrigin.Begin);

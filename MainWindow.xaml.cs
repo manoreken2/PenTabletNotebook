@@ -209,11 +209,10 @@ namespace PenTabletNotebook {
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
             // デフォルトのペンの色は赤。
-            mPLMgr = new PageListMgr(mCanvas, mImage, new SolidColorBrush(Colors.Red));
+            mPLMgr = new PageListMgr(mCanvas, mInkCanvas, mImage, new SolidColorBrush(Colors.Red));
             mRBCRed.IsChecked = true;
 
             mInitialized = true;
-            UpdateUI();
 
             var args = System.Environment.GetCommandLineArgs();
             if (1 < args.Length) {
@@ -224,6 +223,8 @@ namespace PenTabletNotebook {
                     LoadSpecifiedFile(path);
                 }
             }
+
+            UpdateUI();
         }
 
         // File menu ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
@@ -331,56 +332,56 @@ namespace PenTabletNotebook {
             if (!mInitialized) {
                 return;
             }
-            mPLMgr.DOMgr.SetCurPenBrush(new SolidColorBrush(Colors.White));
+            mPLMgr.SetCurPenBrush(new SolidColorBrush(Colors.White));
         }
 
         private void RBCCyan_Checked(object sender, RoutedEventArgs e) {
             if (!mInitialized) {
                 return;
             }
-            mPLMgr.DOMgr.SetCurPenBrush(new SolidColorBrush(Colors.Cyan));
+            mPLMgr.SetCurPenBrush(new SolidColorBrush(Colors.Cyan));
         }
 
         private void RBCMagenta_Checked(object sender, RoutedEventArgs e) {
             if (!mInitialized) {
                 return;
             }
-            mPLMgr.DOMgr.SetCurPenBrush(new SolidColorBrush(Colors.Magenta));
+            mPLMgr.SetCurPenBrush(new SolidColorBrush(Colors.Magenta));
         }
 
         private void RBCYellow_Checked(object sender, RoutedEventArgs e) {
             if (!mInitialized) {
                 return;
             }
-            mPLMgr.DOMgr.SetCurPenBrush(new SolidColorBrush(Colors.Yellow));
+            mPLMgr.SetCurPenBrush(new SolidColorBrush(Colors.Yellow));
         }
 
         private void RBCRed_Checked(object sender, RoutedEventArgs e) {
             if (!mInitialized) {
                 return;
             }
-            mPLMgr.DOMgr.SetCurPenBrush(new SolidColorBrush(Colors.Red));
+            mPLMgr.SetCurPenBrush(new SolidColorBrush(Colors.Red));
         }
 
         private void RBCGreen_Checked(object sender, RoutedEventArgs e) {
             if (!mInitialized) {
                 return;
             }
-            mPLMgr.DOMgr.SetCurPenBrush(new SolidColorBrush(Colors.Green));
+            mPLMgr.SetCurPenBrush(new SolidColorBrush(Colors.Green));
         }
 
         private void RBCBlue_Checked(object sender, RoutedEventArgs e) {
             if (!mInitialized) {
                 return;
             }
-            mPLMgr.DOMgr.SetCurPenBrush(new SolidColorBrush(Colors.Blue));
+            mPLMgr.SetCurPenBrush(new SolidColorBrush(Colors.Blue));
         }
 
         private void RBCBlack_Checked(object sender, RoutedEventArgs e) {
             if (!mInitialized) {
                 return;
             }
-            mPLMgr.DOMgr.SetCurPenBrush(new SolidColorBrush(Colors.Black));
+            mPLMgr.SetCurPenBrush(new SolidColorBrush(Colors.Black));
         }
 
         private void ButtonUndo_Click(object sender, RoutedEventArgs e) {

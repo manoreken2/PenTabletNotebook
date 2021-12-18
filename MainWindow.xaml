@@ -71,8 +71,6 @@
                             <RowDefinition Height="1*" />
                         </Grid.RowDefinitions>
                         <RadioButton Grid.Row="0" x:Name="mRBPen"    Content="Pen"    Margin="4,0,4,0" VerticalAlignment="Center" IsChecked="True" Checked="RBPen_Checked"/>
-                        <RadioButton Grid.Row="1" x:Name="mRBEraser" Content="Eraser" Margin="4,0,4,0" VerticalAlignment="Center"  Checked="RBEraser_Checked"/>
-                        <RadioButton Grid.Row="2" x:Name="mRBSelect" Content="Select" Margin="4,0,4,0" VerticalAlignment="Center" Checked="RBSelect_Checked" />
                     </Grid>
                 </GroupBox>
                 <GroupBox Grid.Row="1" Header="Color" >
@@ -178,8 +176,8 @@
                         </TransformGroup>
                     </Grid.LayoutTransform>
                     <Image x:Name="mImage" HorizontalAlignment="Left" VerticalAlignment="Top" Width="2048" Height="2048" RenderOptions.BitmapScalingMode="HighQuality" />
-                    <Canvas x:Name="mCanvas" Background="#01FFFFFF" >
-                    </Canvas>
+                    <InkCanvas x:Name="mInkCanvas" Background="#01FFFFFF" />
+                    <Canvas x:Name="mCanvas" Background="#01FFFFFF" Visibility="Hidden" />
                 </Grid>
             </ScrollViewer>
         </GroupBox>

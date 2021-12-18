@@ -113,7 +113,14 @@ namespace PenTabletNotebook {
         public void MouseMove(Object sender, MouseEventArgs e) {
             var msePos = e.GetPosition(mCanvas);
 
-            //Console.WriteLine("MM {0},{1} {2}", (int)msePos.X, (int)msePos.Y, e.LeftButton == MouseButtonState.Pressed ? "L" : "");
+            /*
+            Console.WriteLine("MM {0},{1} {2}{3}{4} {5} {6}", (int)msePos.X, (int)msePos.Y,
+                e.LeftButton == MouseButtonState.Pressed ? "L" : " ",
+                e.MiddleButton == MouseButtonState.Pressed ? "M" : " ",
+                e.RightButton == MouseButtonState.Pressed ? "R" : " ",
+                e.XButton1 == MouseButtonState.Pressed ? "X1" : " ",
+                e.XButton2 == MouseButtonState.Pressed ? "X2" : " ");
+            */
 
             switch (mPenMode) {
             case PenModeEnum.PM_Pen:
