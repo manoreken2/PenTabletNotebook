@@ -57,8 +57,8 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="60" />
+                    <RowDefinition Height="80" />
                     <RowDefinition Height="100"/>
-                    <RowDefinition Height="72" />
                     <RowDefinition Height="120" />
                     <RowDefinition Height="118" />
                     <RowDefinition Height="1*" />
@@ -73,7 +73,26 @@
                         <RadioButton Grid.Row="1" x:Name="mRBEraser" Content="Eraser" Margin="4,0,4,0" VerticalAlignment="Center"                  Checked="RBEraser_Checked"/>
                     </Grid>
                 </GroupBox>
-                <GroupBox Grid.Row="1" Header="Color" >
+                <GroupBox Grid.Row="1" Header="Pen Thickness" >
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                        </Grid.RowDefinitions>
+                        <RadioButton Grid.Row="0" Grid.Column="0" x:Name="mRBT1" Content="1" Margin="4,0,4,0" VerticalAlignment="Center" Checked="RBT1_Checked"/>
+                        <RadioButton Grid.Row="1" Grid.Column="0" x:Name="mRBT2" Content="2" Margin="4,0,4,0" VerticalAlignment="Center" Checked="RBT2_Checked" />
+                        <RadioButton Grid.Row="2" Grid.Column="0" x:Name="mRBT4" Content="4" Margin="4,0,4,0" VerticalAlignment="Center" Checked="RBT4_Checked" />
+                        <RadioButton Grid.Row="0" Grid.Column="1" x:Name="mRBT6" Content="6" Margin="4,0,4,0" VerticalAlignment="Center" Checked="RBT6_Checked" />
+                        <RadioButton Grid.Row="1" Grid.Column="1" x:Name="mRBT8" Content="8" Margin="4,0,4,0" VerticalAlignment="Center" Checked="RBT8_Checked" />
+                        <RadioButton Grid.Row="2" Grid.Column="1" x:Name="mRBT12" Content="12" Margin="4,0,4,0" VerticalAlignment="Center" Checked="RBT12_Checked" />
+                    </Grid>
+                </GroupBox>
+                <GroupBox Grid.Row="2" Header="Color" >
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*" />
@@ -89,20 +108,10 @@
                         <RadioButton Grid.Row="1" Grid.Column="0" x:Name="mRBCCyan" Content="Cyan" Margin="4,0,4,0" VerticalAlignment="Center" Checked="RBCCyan_Checked" />
                         <RadioButton Grid.Row="2" Grid.Column="0" x:Name="mRBCMagenta" Content="Magenta" Margin="4,0,4,0" VerticalAlignment="Center" Checked="RBCMagenta_Checked" />
                         <RadioButton Grid.Row="3" Grid.Column="0" x:Name="mRBCYellow" Content="Yellow" Margin="4,0,4,0" VerticalAlignment="Center" Checked="RBCYellow_Checked" />
-                        <RadioButton Grid.Row="0" Grid.Column="1" x:Name="mRBCRed" IsChecked="True" Content="Red" Margin="4,0,4,0" VerticalAlignment="Center" Checked="RBCRed_Checked" />
+                        <RadioButton Grid.Row="0" Grid.Column="1" x:Name="mRBCRed" Content="Red" Margin="4,0,4,0" VerticalAlignment="Center" Checked="RBCRed_Checked" />
                         <RadioButton Grid.Row="1" Grid.Column="1" x:Name="mRBCGreen" Content="Green" Margin="4,0,4,0" VerticalAlignment="Center" Checked="RBCGreen_Checked" />
                         <RadioButton Grid.Row="2" Grid.Column="1" x:Name="mRBCBlue" Content="Blue" Margin="4,0,4,0" VerticalAlignment="Center" Checked="RBCBlue_Checked" />
                         <RadioButton Grid.Row="3" Grid.Column="1" x:Name="mRBCBlack" Content="Black" Margin="4,0,4,0" VerticalAlignment="Center" Checked="RBCBlack_Checked" />
-                    </Grid>
-                </GroupBox>
-                <GroupBox Grid.Row="2" Header="Controls" >
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="1*" />
-                            <RowDefinition Height="1*" />
-                        </Grid.RowDefinitions>
-                        <Button Grid.Row="0" x:Name="mButtonUndo" IsEnabled="False" Content="Undo" Margin="4,0,4,0" VerticalAlignment="Center" Click="ButtonUndo_Click"/>
-                        <Button Grid.Row="1" x:Name="mButtonRedo" IsEnabled="False" Content="Redo" Margin="4,0,4,0" VerticalAlignment="Center" Click="ButtonRedo_Click"/>
                     </Grid>
                 </GroupBox>
                 <GroupBox Grid.Row="3" Header="Display" >

@@ -20,6 +20,9 @@ namespace PenTabletNotebook {
         /// </summary>
         private int mCurPageNr = 0;
 
+        private Color mPenColor = Colors.Red;
+        private double mPenThickness = 3;
+
         public int CurPageNr {
             get { return mCurPageNr; }
             set { mCurPageNr = value; }
@@ -45,19 +48,37 @@ namespace PenTabletNotebook {
         /// <summary>
         /// ctor.
         /// </summary>
-        public PageListMgr(InkCanvas inkCanvas, Image image, SolidColorBrush brush) {
+        public PageListMgr(InkCanvas inkCanvas, Image image, Color penColor, double penThickness) {
             mInkCanvas = inkCanvas;
             mImage = image;
-            SetCurPenBrush(brush);
+
+            UpdatePenColorThickness(penColor, penThickness);
 
             // 最初の空ページを作成。
             AddNewPage(0);
         }
 
-        public void SetCurPenBrush(SolidColorBrush brush) {
+        /// <summary>
+        /// penColorとpenThicknessの値をメンバ変数に保存、mInkCanvasにセットします。
+        /// </summary>
+        private void UpdatePenColorThickness(Color penColor, double penThickness) {
+            mPenColor = penColor;
+            mPenThickness = penThickness;
+
             var da = new DrawingAttributes();
-            da.Color = brush.Color;
+            da.Color = mPenColor;
+            da.Width = mPenThickness;
+            da.Height = mPenThickness;
+            da.FitToCurve = true;
             mInkCanvas.DefaultDrawingAttributes = da;
+        }
+
+        public void SetCurPenColor(Color c) {
+            UpdatePenColorThickness(c, mPenThickness);
+        }
+
+        public void SetCurPenThickness(double penThickness) {
+            UpdatePenColorThickness(mPenColor, penThickness);
         }
 
         /// <summary>

@@ -41,9 +41,6 @@ namespace PenTabletNotebook {
         private void UpdateUI() {
             Console.WriteLine("UpdateUI()");
 
-            mButtonUndo.IsEnabled = mPLMgr.CanUndo();
-            mButtonRedo.IsEnabled = mPLMgr.CanRedo();
-
             // ページ番号関連。
             mTBPageNr.Text = string.Format("{0}", mPLMgr.CurPageNr + 1);
             mLabelTotalPages.Content = string.Format("/ {0}", mPLMgr.PageCount);
@@ -206,9 +203,10 @@ namespace PenTabletNotebook {
         // アプリ起動 ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
-            // デフォルトのペンの色は赤。
-            mPLMgr = new PageListMgr(mInkCanvas, mImage, new SolidColorBrush(Colors.Red));
+            // デフォルトのペンの色は赤。ペンの太さ==3。
+            mPLMgr = new PageListMgr(mInkCanvas, mImage, Colors.Red, 4.0);
             mRBCRed.IsChecked = true;
+            mRBT4.IsChecked = true;
 
             mInitialized = true;
 
@@ -298,56 +296,56 @@ namespace PenTabletNotebook {
             if (!mInitialized) {
                 return;
             }
-            mPLMgr.SetCurPenBrush(new SolidColorBrush(Colors.White));
+            mPLMgr.SetCurPenColor(Colors.White);
         }
 
         private void RBCCyan_Checked(object sender, RoutedEventArgs e) {
             if (!mInitialized) {
                 return;
             }
-            mPLMgr.SetCurPenBrush(new SolidColorBrush(Colors.Cyan));
+            mPLMgr.SetCurPenColor(Colors.Cyan);
         }
 
         private void RBCMagenta_Checked(object sender, RoutedEventArgs e) {
             if (!mInitialized) {
                 return;
             }
-            mPLMgr.SetCurPenBrush(new SolidColorBrush(Colors.Magenta));
+            mPLMgr.SetCurPenColor(Colors.Magenta);
         }
 
         private void RBCYellow_Checked(object sender, RoutedEventArgs e) {
             if (!mInitialized) {
                 return;
             }
-            mPLMgr.SetCurPenBrush(new SolidColorBrush(Colors.Yellow));
+            mPLMgr.SetCurPenColor(Colors.Yellow);
         }
 
         private void RBCRed_Checked(object sender, RoutedEventArgs e) {
             if (!mInitialized) {
                 return;
             }
-            mPLMgr.SetCurPenBrush(new SolidColorBrush(Colors.Red));
+            mPLMgr.SetCurPenColor(Colors.Red);
         }
 
         private void RBCGreen_Checked(object sender, RoutedEventArgs e) {
             if (!mInitialized) {
                 return;
             }
-            mPLMgr.SetCurPenBrush(new SolidColorBrush(Colors.Green));
+            mPLMgr.SetCurPenColor(Colors.Green);
         }
 
         private void RBCBlue_Checked(object sender, RoutedEventArgs e) {
             if (!mInitialized) {
                 return;
             }
-            mPLMgr.SetCurPenBrush(new SolidColorBrush(Colors.Blue));
+            mPLMgr.SetCurPenColor(Colors.Blue);
         }
 
         private void RBCBlack_Checked(object sender, RoutedEventArgs e) {
             if (!mInitialized) {
                 return;
             }
-            mPLMgr.SetCurPenBrush(new SolidColorBrush(Colors.Black));
+            mPLMgr.SetCurPenColor(Colors.Black);
         }
 
         private void ButtonUndo_Click(object sender, RoutedEventArgs e) {
@@ -613,6 +611,43 @@ namespace PenTabletNotebook {
             }
             double scaleX = mSVCanvas.ViewportWidth / imageW;
             mSliderScaling.Value = scaleX;
+        }
+
+        private void RBT1_Checked(object sender, RoutedEventArgs e) {
+            if (!mInitialized) {
+                return;
+            }
+            mPLMgr.SetCurPenThickness(1.0);
+        }
+        private void RBT2_Checked(object sender, RoutedEventArgs e) {
+            if (!mInitialized) {
+                return;
+            }
+            mPLMgr.SetCurPenThickness(2.0);
+        }
+        private void RBT4_Checked(object sender, RoutedEventArgs e) {
+            if (!mInitialized) {
+                return;
+            }
+            mPLMgr.SetCurPenThickness(4.0);
+        }
+        private void RBT6_Checked(object sender, RoutedEventArgs e) {
+            if (!mInitialized) {
+                return;
+            }
+            mPLMgr.SetCurPenThickness(6.0);
+        }
+        private void RBT8_Checked(object sender, RoutedEventArgs e) {
+            if (!mInitialized) {
+                return;
+            }
+            mPLMgr.SetCurPenThickness(8.0);
+        }
+        private void RBT12_Checked(object sender, RoutedEventArgs e) {
+            if (!mInitialized) {
+                return;
+            }
+            mPLMgr.SetCurPenThickness(12.0);
         }
     }
 }
