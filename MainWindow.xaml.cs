@@ -31,20 +31,18 @@ namespace PenTabletNotebook {
         }
 
         private void Undo() {
-            mPLMgr.DOMgr.Undo();
             UpdateUI();
         }
 
         private void Redo() {
-            mPLMgr.DOMgr.Redo();
             UpdateUI();
         }
 
         private void UpdateUI() {
             Console.WriteLine("UpdateUI()");
 
-            mButtonUndo.IsEnabled = mPLMgr.DOMgr.CanUndo();
-            mButtonRedo.IsEnabled = mPLMgr.DOMgr.CanRedo();
+            mButtonUndo.IsEnabled = mPLMgr.CanUndo();
+            mButtonRedo.IsEnabled = mPLMgr.CanRedo();
 
             // ページ番号関連。
             mTBPageNr.Text = string.Format("{0}", mPLMgr.CurPageNr + 1);
@@ -209,7 +207,7 @@ namespace PenTabletNotebook {
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
             // デフォルトのペンの色は赤。
-            mPLMgr = new PageListMgr(mCanvas, mInkCanvas, mImage, new SolidColorBrush(Colors.Red));
+            mPLMgr = new PageListMgr(mInkCanvas, mImage, new SolidColorBrush(Colors.Red));
             mRBCRed.IsChecked = true;
 
             mInitialized = true;
@@ -284,45 +282,13 @@ namespace PenTabletNotebook {
         }
 
         private void EditUndoCmdCanExecute(object sender, CanExecuteRoutedEventArgs e) {
-            e.CanExecute = mPLMgr.DOMgr.CanUndo();
+            e.CanExecute = mPLMgr.CanUndo();
         }
         private void EditRedoCmdCanExecute(object sender, CanExecuteRoutedEventArgs e) {
-            e.CanExecute = mPLMgr.DOMgr.CanRedo();
+            e.CanExecute = mPLMgr.CanRedo();
         }
 
         // Mouse Events ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-
-        private void Canvas_MouseMove(object sender, MouseEventArgs e) {
-            mPLMgr.DOMgr.MouseMove(sender, e);
-        }
-
-        private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            {
-                // マウスをキャプチャーします。
-                var el = sender as UIElement;
-                el.CaptureMouse();
-            }
-
-            mPLMgr.DOMgr.MouseLeftButtonDown(sender, e);
-        }
-
-        private void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            {
-                var el = sender as UIElement;
-                if (el.IsMouseCaptured) {
-                    // キャプチャー解除。
-                    el.ReleaseMouseCapture();
-                }
-            }
-
-            mPLMgr.DOMgr.MouseLeftButtonUp(sender, e);
-            UpdateUI();
-        }
-
-        private void Canvas_MouseRightButtonUp(object sender, MouseButtonEventArgs e) {
-            mPLMgr.DOMgr.MouseRightButtonUp(sender, e);
-            UpdateUI();
-        }
 
         public void HitObjectMoved(Object tag, HitObjectShape hos, Rect xywh) {
             Console.WriteLine("HitObjectMoved {0} {1} {2} {3} {4}", tag, xywh.Left, xywh.Top, xywh.Width, xywh.Height);
@@ -396,21 +362,21 @@ namespace PenTabletNotebook {
             if (!mInitialized) {
                 return;
             }
-            mPLMgr.DOMgr.SetPenMode(PenModeEnum.PM_Select);
+            mPLMgr.SetPenMode(PenModeEnum.PM_Select);
         }
 
         private void RBPen_Checked(object sender, RoutedEventArgs e) {
             if (!mInitialized) {
                 return;
             }
-            mPLMgr.DOMgr.SetPenMode(PenModeEnum.PM_Pen);
+            mPLMgr.SetPenMode(PenModeEnum.PM_Pen);
         }
 
         private void RBEraser_Checked(object sender, RoutedEventArgs e) {
             if (!mInitialized) {
                 return;
             }
-            mPLMgr.DOMgr.SetPenMode(PenModeEnum.PM_Eraser);
+            mPLMgr.SetPenMode(PenModeEnum.PM_Eraser);
         }
 
         private void MenuItemFileAddImg_Click(object sender, RoutedEventArgs e) {
@@ -489,7 +455,7 @@ namespace PenTabletNotebook {
                 return;
             }
 
-            mCanvas.Visibility = Visibility.Visible;
+            mInkCanvas.Visibility = Visibility.Visible;
         }
 
         private void CBDispDrawings_Unchecked(object sender, RoutedEventArgs e) {
@@ -497,7 +463,7 @@ namespace PenTabletNotebook {
                 return;
             }
 
-            mCanvas.Visibility = Visibility.Hidden;
+            mInkCanvas.Visibility = Visibility.Hidden;
         }
 
         private void ButtonAddNewPage_Click(object sender, RoutedEventArgs e) {
@@ -515,7 +481,7 @@ namespace PenTabletNotebook {
                 return;
             }
 
-            mPLMgr.DOMgr.Clear(DrawObjMgr.ClearMode.CM_NewDU);
+            mInkCanvas.Strokes.Clear();
             UpdateUI();
         }
 

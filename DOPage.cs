@@ -42,7 +42,7 @@ namespace PenTabletNotebook {
         public bool Save(System.IO.BinaryWriter bw) {
             if (mStreamBytes == 0) {
                 // ページが追加されたが一度も表示されなかった場合。
-                Serialize(new List<DrawObj>(), mStrokeCollection);
+                Serialize(mStrokeCollection);
             }
 
             var b = mMStream.ToArray();
@@ -71,7 +71,7 @@ namespace PenTabletNotebook {
             // バッファbのメモリストリームから内容を読み出し。
             mBR = new System.IO.BinaryReader(mMStream);
             mBW.Seek(0, System.IO.SeekOrigin.Begin);
-            Deserialize(fileVersion, null, null);
+            Deserialize(fileVersion, null);
 
             if (!saveDir.Equals(loadDir) && mImgFilename.StartsWith(saveDir)) {
                 // mImgFilenameがsaveDirを含む場合、loadDirに置き換えます。
@@ -83,59 +83,44 @@ namespace PenTabletNotebook {
         /// <summary>
         /// ページ情報を内部のMemoryStreamに貯めこみます。
         /// </summary>
-        public bool Serialize(IEnumerable<DrawObj> doList, StrokeCollection strokeCollection) {
-            System.Diagnostics.Debug.Assert(doList != null);
+        public bool Serialize(StrokeCollection strokeCollection) {
+            // 4       FOURCC "PAGE"
+            // 4       画像ファイル名バイト数fnBytes
+            // fnBytes 画像ファイル名
+            // 4       DrawObjの数dCount
+            // dCount個のDrawObj
+            // 4       inkCanvasの情報バイト数。
+            // inkCanvasの情報。
 
-            {
-                // 4       FOURCC "PAGE"
-                // 4       画像ファイル名バイト数fnBytes
-                // fnBytes 画像ファイル名
-                // 4       DrawObjの数dCount
-                // dCount個のDrawObj
-                // 4       inkCanvasの情報バイト数。
-                // inkCanvasの情報。
+            mBW.Write(FOURCC);
 
-                mBW.Write(FOURCC);
+            // mImgFilename文字列を保存します。
+            SaveLoad.SerializeString(mImgFilename, mBW);
 
-                // mImgFilename文字列を保存します。
-                SaveLoad.SerializeString(mImgFilename, mBW);
+            // doList:廃止。
+            int dCount = 0;
+            mBW.Write(dCount);
 
-                // doListの保存。空で無いDOの数を数えます。
-                int dCount = 0;
-                foreach (var d in doList) {
-                    if (!d.IsEmpty()) {
-                        ++dCount;
-                    }
-                }
+            // inkCanvasの情報書き込み。
+            using (var icMS = new System.IO.MemoryStream()) {
+                strokeCollection.Save(icMS);
 
-                mBW.Write(dCount);
-                foreach (var d in doList) {
-                    if (!d.IsEmpty()) {
-                        d.Save(mBW);
-                    }
-                }
+                int icBytes = (int)icMS.Length;
+                var icData = icMS.ToArray();
 
-                // inkCanvasの情報書き込み。
-                using (var icMS = new System.IO.MemoryStream()) {
-                    strokeCollection.Save(icMS);
-
-                    int icBytes = (int)icMS.Length;
-                    var icData = icMS.ToArray();
-
-                    mBW.Write(icBytes);
-                    mBW.Write(icData);
-                }
-
-                // Streamの有効データバイト数。
-                mStreamBytes = mBW.BaseStream.Position;
-
-                mBW.Seek(0, System.IO.SeekOrigin.Begin);
-
-                // ストリームをクローズするとmMemStreamが消えるのでクローズしない。
-
-                // このフォーマットのバージョンを保持。
-                mStreamFileVersion = SaveLoad.FILE_VERSION;
+                mBW.Write(icBytes);
+                mBW.Write(icData);
             }
+
+            // Streamの有効データバイト数。
+            mStreamBytes = mBW.BaseStream.Position;
+
+            mBW.Seek(0, System.IO.SeekOrigin.Begin);
+
+            // ストリームをクローズするとmMemStreamが消えるのでクローズしない。
+
+            // このフォーマットのバージョンを保持。
+            mStreamFileVersion = SaveLoad.FILE_VERSION;
 
             return true;
         }
@@ -143,8 +128,8 @@ namespace PenTabletNotebook {
         /// <summary>
         /// 内部に蓄えられたMemoryStreamからDrawObjとImageFilenameを実体化します。
         /// </summary>
-        /// <param name="canvas">キャンバスに登録しない場合nullを指定します。</param>
-        public IEnumerable<DrawObj> Deserialize(int fileVersion, Canvas canvas, InkCanvas inkCanvas) {
+        /// <param name="inkCanvas">キャンバスに登録しない場合nullを指定します。</param>
+        public IEnumerable<DrawObj> Deserialize(int fileVersion, InkCanvas inkCanvas) {
             if (0 <= fileVersion) {
                 // ストリームファイルバージョンを更新。
                 mStreamFileVersion = fileVersion;
@@ -173,7 +158,7 @@ namespace PenTabletNotebook {
 
                 int dCount = mBR.ReadInt32();
                 for (int i=0; i<dCount; ++i) {
-                    var d = DrawObjNew.Load(mBR, canvas);
+                    var d = DrawObjNew.Load(mBR);
                     r.Add(d);
                 }
 

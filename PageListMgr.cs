@@ -12,14 +12,8 @@ namespace PenTabletNotebook {
     class PageListMgr {
         private List<DOPage> mPageList = new List<DOPage>();
 
-        private Canvas mCanvas;
         private InkCanvas mInkCanvas;
         private Image mImage;
-
-        /// <summary>
-        /// Canvasに追加されているペン描画物のリスト。
-        /// </summary>
-        private DrawObjMgr mDOMgr;
 
         /// <summary>
         /// 0で始まる番号のページ番号。
@@ -40,13 +34,6 @@ namespace PenTabletNotebook {
         }
 
         /// <summary>
-        /// DrawObjMgrを戻します。
-        /// </summary>
-        public DrawObjMgr DOMgr {
-            get { return mDOMgr; }
-        }
-
-        /// <summary>
         /// コピーではなく、オリジナルを戻します。
         /// </summary>
         public IEnumerable<DOPage> PageList() {
@@ -58,11 +45,9 @@ namespace PenTabletNotebook {
         /// <summary>
         /// ctor.
         /// </summary>
-        public PageListMgr(Canvas canvas, InkCanvas inkCanvas, Image image, SolidColorBrush brush) {
-            mCanvas = canvas;
+        public PageListMgr(InkCanvas inkCanvas, Image image, SolidColorBrush brush) {
             mInkCanvas = inkCanvas;
             mImage = image;
-            mDOMgr = new DrawObjMgr(canvas, brush);
             SetCurPenBrush(brush);
 
             // 最初の空ページを作成。
@@ -70,8 +55,6 @@ namespace PenTabletNotebook {
         }
 
         public void SetCurPenBrush(SolidColorBrush brush) {
-            mDOMgr.SetCurPenBrush(brush);
-
             var da = new DrawingAttributes();
             da.Color = brush.Color;
             mInkCanvas.DefaultDrawingAttributes = da;
@@ -103,11 +86,11 @@ namespace PenTabletNotebook {
         }
 
         /// <summary>
-        /// 現在表示中ページのDrawObjをページエントリーにシリアライズします。
+        /// 現在表示中ページをページエントリーにシリアライズします。
         /// </summary>
-        public void SerializeDOofCurPage(IEnumerable<DrawObj> doList) {
+        public void SerializeCurPage() {
             var dop = mPageList[CurPageNr];
-            dop.Serialize(doList, mInkCanvas.Strokes);
+            dop.Serialize(mInkCanvas.Strokes);
         }
 
         private void ShowImg(string path) {
@@ -140,20 +123,15 @@ namespace PenTabletNotebook {
         public DOPage ChangePage(int pageNr) {
             if (0 <= mCurPageNr) {
                 // 現在表示中のページをシリアライズします。
-                SerializeDOofCurPage(mDOMgr.GetDOList());
+                SerializeCurPage();
             }
-
-            // キャンバスのDrawObjを全て消します。
-            mDOMgr.Clear(DrawObjMgr.ClearMode.CM_ZeroObj);
 
             // Inkキャンバスをクリアー。
             mInkCanvas.Strokes.Clear();
 
-            // PageのDOをデシリアライズし実体化、mCanvasに表示します。
+            // Pageをデシリアライズし実体化、mInkCanvasに表示します。
             var dop = mPageList[pageNr];
-            var doList = dop.Deserialize(-1, mCanvas, mInkCanvas);
-
-            mDOMgr.SetDOList(doList);
+            var doList = dop.Deserialize(-1, mInkCanvas);
 
             ShowImg(dop.ImgFilename);
 
@@ -162,11 +140,9 @@ namespace PenTabletNotebook {
         }
 
         public bool Load(string path, ref List<PageTag> ptList_return) {
-            mCanvas.Children.Clear();
             mInkCanvas.Strokes.Clear();
             mPageList.Clear();
             ptList_return.Clear();
-            mDOMgr.Clear(DrawObjMgr.ClearMode.CM_ZeroObj);
 
             var sl = new SaveLoad();
             var sc = new SaveCtx();
@@ -179,7 +155,6 @@ namespace PenTabletNotebook {
                 ChangePage(sc.curPageNr);
             } else {
                 // 読み出し失敗。
-                mDOMgr.Clear(DrawObjMgr.ClearMode.CM_NewDU);
             }
 
             NewPageIfEmpty();
@@ -187,15 +162,13 @@ namespace PenTabletNotebook {
         }
 
         public bool Save(string path, List<PageTag> ptList) {
+            // 現在表示中のページをシリアライズします。
+            SerializeCurPage();
+
             var sl = new SaveLoad();
+
             for (int i = 0; i < mPageList.Count; ++i) {
                 var p = mPageList[i];
-                if (mCurPageNr == i) {
-                    // 現在表示中のページをシリアライズします。
-                    var doList = mDOMgr.GetDOList();
-                    p.Serialize(doList, mInkCanvas.Strokes);
-                }
-
                 sl.SaveAddPage(p);
             }
 
@@ -207,10 +180,8 @@ namespace PenTabletNotebook {
         }
 
         public void ClearAndNewPage() {
-            mCanvas.Children.Clear();
             mInkCanvas.Strokes.Clear();
             mPageList.Clear();
-            mDOMgr.Clear(DrawObjMgr.ClearMode.CM_NewDU);
             NewPageIfEmpty();
             mCurPageNr = 0;
         }
@@ -240,6 +211,28 @@ namespace PenTabletNotebook {
                 mPageList.RemoveAt(mCurPageNr);
 
                 mCurPageNr = curPgNrAfterDelete;
+            }
+        }
+
+        public bool CanUndo() {
+            return false;
+        }
+
+        public bool CanRedo() {
+            return false;
+        }
+
+        public void SetPenMode(PenModeEnum pm) {
+            switch (pm) {
+            case PenModeEnum.PM_Pen:
+                mInkCanvas.EditingMode = InkCanvasEditingMode.Ink;
+                break;
+            case PenModeEnum.PM_Eraser:
+                mInkCanvas.EditingMode = InkCanvasEditingMode.EraseByStroke;
+                break;
+            default:
+                System.Diagnostics.Debug.Assert(false);
+                break;
             }
         }
     }

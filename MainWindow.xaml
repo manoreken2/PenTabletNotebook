@@ -56,7 +56,7 @@
         <GroupBox Grid.Row="1" Header="Settings" Margin="4,0,5,4" Grid.RowSpan="2" >
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="80" />
+                    <RowDefinition Height="60" />
                     <RowDefinition Height="100"/>
                     <RowDefinition Height="72" />
                     <RowDefinition Height="120" />
@@ -68,9 +68,9 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*" />
                             <RowDefinition Height="1*" />
-                            <RowDefinition Height="1*" />
                         </Grid.RowDefinitions>
-                        <RadioButton Grid.Row="0" x:Name="mRBPen"    Content="Pen"    Margin="4,0,4,0" VerticalAlignment="Center" IsChecked="True" Checked="RBPen_Checked"/>
+                        <RadioButton Grid.Row="0" x:Name="mRBPen"    Content="Pen / Eraser"    Margin="4,0,4,0" VerticalAlignment="Center" IsChecked="True" Checked="RBPen_Checked"/>
+                        <RadioButton Grid.Row="1" x:Name="mRBEraser" Content="Eraser" Margin="4,0,4,0" VerticalAlignment="Center"                  Checked="RBEraser_Checked"/>
                     </Grid>
                 </GroupBox>
                 <GroupBox Grid.Row="1" Header="Color" >
@@ -168,7 +168,7 @@
         </GroupBox>
         <GroupBox Grid.RowSpan="2" Grid.Column="1" Header="Canvas" Margin="0,0,4,0" >
             <ScrollViewer x:Name="mSVCanvas" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" >
-                <Grid x:Name="mGridCanvas" Background="#FFC0C0C0" MouseMove="Canvas_MouseMove" MouseLeftButtonDown="Canvas_MouseLeftButtonDown" MouseLeftButtonUp="Canvas_MouseLeftButtonUp" MouseRightButtonUp="Canvas_MouseRightButtonUp" Cursor="Cross" >
+                <Grid x:Name="mGridCanvas" Background="#FFC0C0C0">
                     <Grid.LayoutTransform>
                         <TransformGroup>
                             <ScaleTransform ScaleY="{Binding Path=Value, ElementName=mSliderScaling}" 
@@ -177,7 +177,6 @@
                     </Grid.LayoutTransform>
                     <Image x:Name="mImage" HorizontalAlignment="Left" VerticalAlignment="Top" Width="2048" Height="2048" RenderOptions.BitmapScalingMode="HighQuality" />
                     <InkCanvas x:Name="mInkCanvas" Background="#01FFFFFF" />
-                    <Canvas x:Name="mCanvas" Background="#01FFFFFF" Visibility="Hidden" />
                 </Grid>
             </ScrollViewer>
         </GroupBox>
