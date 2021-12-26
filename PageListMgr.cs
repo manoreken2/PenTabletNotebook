@@ -13,7 +13,10 @@ namespace PenTabletNotebook {
         private List<DOPage> mPageList = new List<DOPage>();
 
         private InkCanvas mInkCanvas;
+        private Canvas mCanvas;
         private Image mImage;
+
+        private List<System.Windows.Shapes.Line> mLineList = new List<System.Windows.Shapes.Line>();
 
         /// <summary>
         /// 0で始まる番号のページ番号。
@@ -48,8 +51,9 @@ namespace PenTabletNotebook {
         /// <summary>
         /// ctor.
         /// </summary>
-        public PageListMgr(InkCanvas inkCanvas, Image image, Color penColor, double penThickness) {
+        public PageListMgr(InkCanvas inkCanvas, Canvas canvas, Image image, Color penColor, double penThickness) {
             mInkCanvas = inkCanvas;
+            mCanvas = canvas;
             mImage = image;
 
             UpdatePenColorThickness(penColor, penThickness);
@@ -255,6 +259,36 @@ namespace PenTabletNotebook {
                 System.Diagnostics.Debug.Assert(false);
                 break;
             }
+        }
+
+        public void DrawLines(int nLines, Brush brush, double thickness) {
+            UndrawLines();
+
+            double W = 2048.0;
+            double H = 2048.0;
+            for (int i = 1; i <= nLines; ++i) {
+                double y = H * i / nLines;
+                var l = new System.Windows.Shapes.Line();
+                l.X1 = 0;
+                l.X2 = W;
+                l.Y1 = y;
+                l.Y2 = y;
+                l.Stroke = brush;
+                l.StrokeThickness = thickness;
+                mCanvas.Children.Add(l);
+                Canvas.SetLeft(l, 0);
+                Canvas.SetTop(l, 0);
+
+                mLineList.Add(l);
+            }
+        }
+
+        public void UndrawLines() {
+            for (int i=mLineList.Count-1; 0<=i;--i) {
+                var l = mLineList[i];
+                mCanvas.Children.Remove(l);
+            }
+            mLineList.Clear();
         }
     }
 }

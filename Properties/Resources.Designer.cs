@@ -340,7 +340,7 @@ namespace PenTabletNotebook.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pen / Erase.
+        ///   Looks up a localized string similar to Pen / Eraser.
         /// </summary>
         internal static string PenEraser {
             get {

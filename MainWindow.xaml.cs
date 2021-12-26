@@ -247,11 +247,19 @@ namespace PenTabletNotebook {
             ChangePage(newPgNr);
         }
 
+        private void DrawLines() {
+            mPLMgr.DrawLines((int)mSliderLine.Value, new SolidColorBrush(Colors.Gray), 1.0);
+        }
+
+        private void UndrawLines() {
+            mPLMgr.UndrawLines();
+        }
+
         // アプリ起動 ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
             // デフォルトのペンの色は赤。ペンの太さ==3。
-            mPLMgr = new PageListMgr(mInkCanvas, mImage, Colors.Red, 4.0);
+            mPLMgr = new PageListMgr(mInkCanvas, mCanvas, mImage, Colors.Red, 4.0);
             mRBCRed.IsChecked = true;
             mRBT4.IsChecked = true;
 
@@ -511,6 +519,21 @@ namespace PenTabletNotebook {
             mInkCanvas.Visibility = Visibility.Hidden;
         }
 
+
+        private void CBDispLine_Checked(object sender, RoutedEventArgs e) {
+            if (!mInitialized) {
+                return;
+            }
+            DrawLines();
+        }
+
+        private void CBDispLine_Unchecked(object sender, RoutedEventArgs e) {
+            if (!mInitialized) {
+                return;
+            }
+            UndrawLines();
+        }
+
         private void ButtonAddNewPage_Click(object sender, RoutedEventArgs e) {
             if (!mInitialized) {
                 return;
@@ -695,6 +718,13 @@ namespace PenTabletNotebook {
                 return;
             }
             mPLMgr.SetCurPenThickness(12.0);
+        }
+
+        private void mSliderLine_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
+            if (!mInitialized) {
+                return;
+            }
+            DrawLines();
         }
     }
 }
