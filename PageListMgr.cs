@@ -266,11 +266,11 @@ namespace PenTabletNotebook {
 
             double W = 2048.0;
             double H = 2048.0;
-            for (int i = 1; i <= nLines; ++i) {
+            for (int i = 1; i <= nLines*3; ++i) {
                 double y = H * i / nLines;
                 var l = new System.Windows.Shapes.Line();
                 l.X1 = 0;
-                l.X2 = W;
+                l.X2 = W * 2;
                 l.Y1 = y;
                 l.Y2 = y;
                 l.Stroke = brush;

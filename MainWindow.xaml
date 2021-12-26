@@ -128,7 +128,7 @@
                             <RowDefinition Height="1*" />
                         </Grid.RowDefinitions>
                         <CheckBox x:Name="mCBDispLine" Grid.Row="0" Margin="4,0,0,0" VerticalAlignment="Center" Content="Line" IsChecked="False" Checked="CBDispLine_Checked" Unchecked="CBDispLine_Unchecked" />
-                        <Slider Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Name="mSliderLine" Margin="0,0,4,0" Maximum="50" Value="25" Minimum="10" SmallChange="1" LargeChange="2" ValueChanged="mSliderLine_ValueChanged" />
+                        <Slider Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Name="mSliderLine" Margin="0,0,4,0" Maximum="25" Value="14" Minimum="12" SmallChange="1" LargeChange="2" TickPlacement="Both" ValueChanged="mSliderLine_ValueChanged" />
                         <CheckBox x:Name="mCBDispDrawings" Grid.Row="1" Grid.ColumnSpan="2" Margin="4,0,0,0" VerticalAlignment="Center" Content="Display Drawings" IsChecked="True" Checked="CBDispDrawings_Checked" Unchecked="CBDispDrawings_Unchecked" />
                         <Label x:Name="mLabelScale" Content="Scale:" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center" />
                         <Slider Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Name="mSliderScaling" Margin="0,0,4,0" Maximum="2.0" Value="0.5" Minimum="0.25" Ticks="0.25 0.375 0.5 0.625 0.75 0.875 1.0 1.25 1.5 1.75 2.0" SmallChange="0.125" LargeChange="0.125" TickFrequency="0.125" TickPlacement="Both" IsMoveToPointEnabled="True" />
