@@ -10,11 +10,6 @@ using System.Linq;
 
 namespace PenTabletNotebook {
     public partial class MainWindow : Window, IHitObjectMoved {
-        public MainWindow() {
-            InitializeComponent();
-            LocalizeUI();
-        }
-
         private void LocalizeUI() {
             mMenuItemFile.Header = Properties.Resources.File;
             mMenuItemFileNew.Header = Properties.Resources.FileNew;
@@ -157,6 +152,11 @@ namespace PenTabletNotebook {
                 foreach (var pt in ptList) {
                     mLBPageTags.Items.Add(pt);
                 }
+
+                ScaleToFit();
+
+                // 現在表示ページ番号の同期等。
+                UpdateUI();
             } else {
                 // 読み出し失敗。
                 MessageBox.Show("Error Opening File", "Error opening file", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -255,7 +255,40 @@ namespace PenTabletNotebook {
             mPLMgr.UndrawLines();
         }
 
+        private void ScaleToFit() {
+            double imageW = mImage.ActualWidth;
+            if (imageW <= 0) {
+                imageW = mImage.Width;
+            }
+            double imageH = mImage.ActualHeight;
+            if (imageH <= 0) {
+                imageH = mImage.Height;
+            }
+
+            double scaleX = mSVCanvas.ViewportWidth / imageW;
+            double scaleY = mSVCanvas.ViewportHeight / imageH;
+            if (scaleX < scaleY) {
+                mSliderScaling.Value = scaleX;
+            } else {
+                mSliderScaling.Value = scaleY;
+            }
+        }
+
+        private void ScaleToImage() {
+            double imageW = mImage.ActualWidth;
+            if (imageW <= 0) {
+                imageW = mImage.Width;
+            }
+            double scaleX = mSVCanvas.ViewportWidth / imageW;
+            mSliderScaling.Value = scaleX;
+        }
+
         // アプリ起動 ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+
+        public MainWindow() {
+            InitializeComponent();
+            LocalizeUI();
+        }
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
             // デフォルトのペンの色は赤。ペンの太さ==3。
@@ -656,31 +689,11 @@ namespace PenTabletNotebook {
         }
 
         private void ButtonScaleToFit_Click(object sender, RoutedEventArgs e) {
-            double imageW = mImage.ActualWidth;
-            if (imageW <= 0) {
-                imageW = mImage.Width;
-            }
-            double imageH = mImage.ActualHeight;
-            if (imageH <= 0) {
-                imageH = mImage.Height;
-            }
-
-            double scaleX = mSVCanvas.ViewportWidth  / imageW;
-            double scaleY = mSVCanvas.ViewportHeight / imageH;
-            if (scaleX < scaleY) {
-                mSliderScaling.Value = scaleX;
-            } else {
-                mSliderScaling.Value = scaleY;
-            }
+            ScaleToFit();
         }
 
         private void ButtonScaleToImageW_Click(object sender, RoutedEventArgs e) {
-            double imageW = mImage.ActualWidth;
-            if (imageW <= 0) {
-                imageW = mImage.Width;
-            }
-            double scaleX = mSVCanvas.ViewportWidth / imageW;
-            mSliderScaling.Value = scaleX;
+            ScaleToImage();
         }
 
         private void RBT1_Checked(object sender, RoutedEventArgs e) {
