@@ -247,12 +247,20 @@ namespace PenTabletNotebook {
             ChangePage(newPgNr);
         }
 
-        private void DrawLines() {
-            mPLMgr.DrawLines((int)mSliderLine.Value, new SolidColorBrush(Colors.Gray), 1.0);
+        private void DrawHLines() {
+            mPLMgr.DrawHLines((int)mSliderHLine.Value, new SolidColorBrush(Colors.Gray), 1.0);
         }
 
-        private void UndrawLines() {
-            mPLMgr.UndrawLines();
+        private void UndrawHLines() {
+            mPLMgr.UndrawHLines();
+        }
+
+        private void DrawVLines() {
+            mPLMgr.DrawVLines((int)mSliderVLine.Value, new SolidColorBrush(Colors.Gray), 1.0);
+        }
+
+        private void UndrawVLines() {
+            mPLMgr.UndrawVLines();
         }
 
         private void ScaleToFit() {
@@ -553,18 +561,32 @@ namespace PenTabletNotebook {
         }
 
 
-        private void CBDispLine_Checked(object sender, RoutedEventArgs e) {
+        private void CBDispHLine_Checked(object sender, RoutedEventArgs e) {
             if (!mInitialized) {
                 return;
             }
-            DrawLines();
+            DrawHLines();
         }
 
-        private void CBDispLine_Unchecked(object sender, RoutedEventArgs e) {
+        private void CBDispHLine_Unchecked(object sender, RoutedEventArgs e) {
             if (!mInitialized) {
                 return;
             }
-            UndrawLines();
+            UndrawHLines();
+        }
+
+        private void CBDispVLine_Checked(object sender, RoutedEventArgs e) {
+            if (!mInitialized) {
+                return;
+            }
+            DrawVLines();
+        }
+
+        private void CBDispVLine_Unchecked(object sender, RoutedEventArgs e) {
+            if (!mInitialized) {
+                return;
+            }
+            UndrawVLines();
         }
 
         private void ButtonAddNewPage_Click(object sender, RoutedEventArgs e) {
@@ -620,12 +642,15 @@ namespace PenTabletNotebook {
                 if (pt.PageNr < mPLMgr.CurPageNr) {
                     mLBPageTags.Items.Insert(i + 1, newPageTag);
                     bAdded = true;
+                    mLBPageTags.SelectedIndex = i + 1;
+                    mLBPageTags.ScrollIntoView(mLBPageTags.Items[i + 1]);
                     break;
                 }
             }
             if (!bAdded) {
                 // リストの先頭に追加します。
                 mLBPageTags.Items.Insert(0, newPageTag);
+                mLBPageTags.SelectedIndex = 0;
             }
         }
 
@@ -733,11 +758,17 @@ namespace PenTabletNotebook {
             mPLMgr.SetCurPenThickness(12.0);
         }
 
-        private void mSliderLine_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
+        private void SliderHLine_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
             if (!mInitialized) {
                 return;
             }
-            DrawLines();
+            DrawHLines();
+        }
+        private void SliderVLine_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
+            if (!mInitialized) {
+                return;
+            }
+            DrawVLines();
         }
     }
 }

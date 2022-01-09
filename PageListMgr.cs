@@ -16,7 +16,8 @@ namespace PenTabletNotebook {
         private Canvas mCanvas;
         private Image mImage;
 
-        private List<System.Windows.Shapes.Line> mLineList = new List<System.Windows.Shapes.Line>();
+        private List<System.Windows.Shapes.Line> mHLineList = new List<System.Windows.Shapes.Line>();
+        private List<System.Windows.Shapes.Line> mVLineList = new List<System.Windows.Shapes.Line>();
 
         /// <summary>
         /// 0で始まる番号のページ番号。
@@ -261,8 +262,8 @@ namespace PenTabletNotebook {
             }
         }
 
-        public void DrawLines(int nLines, Brush brush, double thickness) {
-            UndrawLines();
+        public void DrawHLines(int nLines, Brush brush, double thickness) {
+            UndrawHLines();
 
             double W = 2048.0;
             double H = 2048.0;
@@ -279,16 +280,46 @@ namespace PenTabletNotebook {
                 Canvas.SetLeft(l, 0);
                 Canvas.SetTop(l, 0);
 
-                mLineList.Add(l);
+                mHLineList.Add(l);
             }
         }
 
-        public void UndrawLines() {
-            for (int i=mLineList.Count-1; 0<=i;--i) {
-                var l = mLineList[i];
+        public void UndrawHLines() {
+            for (int i=mHLineList.Count-1; 0<=i;--i) {
+                var l = mHLineList[i];
                 mCanvas.Children.Remove(l);
             }
-            mLineList.Clear();
+            mHLineList.Clear();
+        }
+
+        public void DrawVLines(int nLines, Brush brush, double thickness) {
+            UndrawVLines();
+
+            double W = 2048.0;
+            double H = 2048.0;
+            for (int i = 1; i <= nLines * 3; ++i) {
+                double x = W * i / nLines;
+                var l = new System.Windows.Shapes.Line();
+                l.X1 = x;
+                l.X2 = x;
+                l.Y1 = 0;
+                l.Y2 = H * 2;
+                l.Stroke = brush;
+                l.StrokeThickness = thickness;
+                mCanvas.Children.Add(l);
+                Canvas.SetLeft(l, 0);
+                Canvas.SetTop(l, 0);
+
+                mVLineList.Add(l);
+            }
+        }
+
+        public void UndrawVLines() {
+            for (int i = mVLineList.Count - 1; 0 <= i; --i) {
+                var l = mVLineList[i];
+                mCanvas.Children.Remove(l);
+            }
+            mHLineList.Clear();
         }
     }
 }
