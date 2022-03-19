@@ -15,6 +15,9 @@ namespace PenTabletNotebook {
             set { mImgFilename = value; }
         }
 
+        private string mSaveDir;
+        private string mLoadDir;
+
         /// <summary>
         /// DrawObjの情報をシリアライズし保持。
         /// </summary>
@@ -59,6 +62,9 @@ namespace PenTabletNotebook {
         }
 
         public void Load(int fileVersion, System.IO.BinaryReader br, string saveDir, string loadDir) {
+            mSaveDir = saveDir;
+            mLoadDir = loadDir;
+
             // brから読んでメモリ上にバッファbを作成。
             int bytes = br.ReadInt32();
             var b = br.ReadBytes(bytes);
@@ -72,11 +78,6 @@ namespace PenTabletNotebook {
             mBR = new System.IO.BinaryReader(mMStream);
             mBW.Seek(0, System.IO.SeekOrigin.Begin);
             Deserialize(fileVersion, null);
-
-            if (!saveDir.Equals(loadDir) && mImgFilename.StartsWith(saveDir)) {
-                // mImgFilenameがsaveDirを含む場合、loadDirに置き換えます。
-                mImgFilename = mImgFilename.Replace(saveDir, loadDir);
-            }
         }
 
 
@@ -155,6 +156,12 @@ namespace PenTabletNotebook {
 
                 // mImgFilename文字列を読み出します。
                 mImgFilename = SaveLoad.DeserializeString(mBR);
+                if (mImgFilename.StartsWith(mSaveDir)) {
+                    // mImgFilenameがsaveDirを含む場合、loadDirに置き換えます。
+                    mImgFilename = mImgFilename.Replace(mSaveDir, mLoadDir);
+
+                    Console.WriteLine("img {0}", mImgFilename);
+                }
 
                 int dCount = mBR.ReadInt32();
                 for (int i=0; i<dCount; ++i) {
